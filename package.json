@@ -1,0 +1,38 @@
+{
+  "name": "pejay-ui",
+  "version": "1.0.0",
+  "description": "react ui components",
+  "bin": {
+    "pejay-ui": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "templates/",
+    "utils/",
+    "registry.json"
+  ],
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "cli"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.0.0",
+    "fs-extra": "^11.0.0",
+    "@babel/core": "^7.24.0",
+    "@babel/preset-typescript": "^7.24.0",
+    "inquirer": "^9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pejaybro/pejay-ui.git"
+  },
+  "author": "Prayas Jadli",
+  "email": "[EMAIL_ADDRESS]",
+  "bugs": {
+    "url": "https://github.com/pejaybro/pejay-ui/issues"
+  },
+  "homepage": "https://github.com/pejaybro/pejay-ui#readme"
+}
