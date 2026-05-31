@@ -1,6 +1,7 @@
 {
   "name": "pejay-ui",
   "version": "1.0.0",
+  "type": "module",
   "description": "react ui components",
   "bin": {
     "pejay-ui": "./bin/cli.js"
@@ -19,10 +20,10 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "commander": "^12.0.0",
-    "fs-extra": "^11.0.0",
     "@babel/core": "^7.24.0",
     "@babel/preset-typescript": "^7.24.0",
+    "commander": "^12.0.0",
+    "fs-extra": "^11.0.0",
     "inquirer": "^9.0.0"
   },
   "repository": {
@@ -34,5 +35,18 @@
   "bugs": {
     "url": "https://github.com/pejaybro/pejay-ui/issues"
   },
-  "homepage": "https://github.com/pejaybro/pejay-ui#readme"
+  "homepage": "https://github.com/pejaybro/pejay-ui#readme",
+  "devDependencies": {
+    "@floating-ui/react": "^0.27.19",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "clsx": "^2.1.1",
+    "dayjs": "^1.11.21",
+    "lucide-react": "^1.17.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3"
+  }
 }
