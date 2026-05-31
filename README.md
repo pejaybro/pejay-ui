@@ -28,34 +28,153 @@ npx pejay-ui remove <component-name>
 
 ## Available Components
 
-Below is the list of components you can add to your project using the `add` command:
+Here is the list of components. You can copy the command using the **Copy** button on the right:
 
-### Buttons
-* **`button`**: Premium interactive button supporting multiple variants (solid, soft, ghost), loaders, and custom hover tooltips.
-
-### Form Inputs
-* **`form/input`**: Standard text input field with validation, labels, and error messaging.
-* **`form/amount-input`**: Numeric input configured for currency entry with symbol prefixes and formatting.
-* **`form/checkbox`**: Styled single checkbox input.
-* **`form/checkbox-group`**: Group of checkboxes managing single or multiple selection states with item indices.
-* **`form/email-input`**: Dedicated input for email addresses with prefix icon.
-* **`form/file-input`**: Premium dropzone-style file upload component supporting drag-and-drop and progress/preview states.
-* **`form/number-input`**: Input field for numerical values with increment/decrement steppers.
-* **`form/password-input`**: Secure text input with eye icon toggle to show/hide the password.
-* **`form/phone-input`**: Formatted input field for telephone numbers.
-* **`form/radio`**: Styled radio selection dot.
-* **`form/radio-group`**: Group of mutually exclusive radio options.
-* **`form/range-slider`**: Slider controls for choosing values from a numeric range.
-* **`form/switch`**: Styled toggle switch representing boolean options.
-* **`form/textarea`**: Multiline text area input with character counter/limit indicators.
-* **`form/url-input`**: Styled input field specifically formatted for web addresses/links.
-
-### Date & Time Pickers
-* **`form/date-picker`**: Calendar-based date selector popover with inline month/year dropdowns.
-* **`form/date-range-picker`**: Date range selector to pick start and end dates with highlight ranges.
-* **`form/time-picker`**: Dropdown component for picking specific hours, minutes, and AM/PM.
-* **`form/time-range-picker`**: Popover time selector for configuring custom duration intervals.
-
-### Dropdowns & Selects
-* **`dropdown/select-input`**: Elegant single-select searchable dropdown input.
-* **`dropdown/multiselect-input`**: Searchable multiselect dropdown which renders selected options as dismissible tag pills.
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Description</th>
+      <th>Install Command</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Buttons -->
+    <tr>
+      <td><strong>button</strong></td>
+      <td>Premium interactive button with multiple variants, loaders, and tooltips.</td>
+      <td><code>npx pejay-ui add button</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add button')">Copy</button></td>
+    </tr>
+    <!-- Form Inputs -->
+    <tr>
+      <td><strong>form/input</strong></td>
+      <td>Standard text input field with labels and validation errors.</td>
+      <td><code>npx pejay-ui add form/input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/input')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/amount-input</strong></td>
+      <td>Numeric input configured for formatted currency entry.</td>
+      <td><code>npx pejay-ui add form/amount-input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/amount-input')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/checkbox</strong></td>
+      <td>Styled single checkbox input.</td>
+      <td><code>npx pejay-ui add form/checkbox</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/checkbox')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/checkbox-group</strong></td>
+      <td>Group of checkboxes managing single/multiple selection states.</td>
+      <td><code>npx pejay-ui add form/checkbox-group</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/checkbox-group')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/email-input</strong></td>
+      <td>Dedicated input for email addresses with prefix icon.</td>
+      <td><code>npx pejay-ui add form/email-input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/email-input')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/file-input</strong></td>
+      <td>Premium dropzone-style file upload component.</td>
+      <td><code>npx pejay-ui add form/file-input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/file-input')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/number-input</strong></td>
+      <td>Input field for numerical values with increment/decrement steppers.</td>
+      <td><code>npx pejay-ui add form/number-input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/number-input')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/password-input</strong></td>
+      <td>Secure text input with eye icon toggle to show/hide password.</td>
+      <td><code>npx pejay-ui add form/password-input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/password-input')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/phone-input</strong></td>
+      <td>Formatted input field for telephone numbers.</td>
+      <td><code>npx pejay-ui add form/phone-input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/phone-input')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/radio</strong></td>
+      <td>Styled radio selection dot.</td>
+      <td><code>npx pejay-ui add form/radio</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/radio')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/radio-group</strong></td>
+      <td>Group of mutually exclusive radio options.</td>
+      <td><code>npx pejay-ui add form/radio-group</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/radio-group')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/range-slider</strong></td>
+      <td>Slider controls for choosing values from a numeric range.</td>
+      <td><code>npx pejay-ui add form/range-slider</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/range-slider')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/switch</strong></td>
+      <td>Styled toggle switch representing boolean options.</td>
+      <td><code>npx pejay-ui add form/switch</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/switch')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/textarea</strong></td>
+      <td>Multiline text area input with character counter/limits.</td>
+      <td><code>npx pejay-ui add form/textarea</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/textarea')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/url-input</strong></td>
+      <td>Styled input field specifically formatted for web addresses.</td>
+      <td><code>npx pejay-ui add form/url-input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/url-input')">Copy</button></td>
+    </tr>
+    <!-- Date & Time Pickers -->
+    <tr>
+      <td><strong>form/date-picker</strong></td>
+      <td>Calendar-based date selector popover with inline selects.</td>
+      <td><code>npx pejay-ui add form/date-picker</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/date-picker')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/date-range-picker</strong></td>
+      <td>Date range selector to pick start and end dates.</td>
+      <td><code>npx pejay-ui add form/date-range-picker</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/date-range-picker')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/time-picker</strong></td>
+      <td>Dropdown component for picking hours, minutes, and AM/PM.</td>
+      <td><code>npx pejay-ui add form/time-picker</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/time-picker')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>form/time-range-picker</strong></td>
+      <td>Popover time selector for configuring custom duration intervals.</td>
+      <td><code>npx pejay-ui add form/time-range-picker</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add form/time-range-picker')">Copy</button></td>
+    </tr>
+    <!-- Dropdowns & Selects -->
+    <tr>
+      <td><strong>dropdown/select-input</strong></td>
+      <td>Elegant single-select searchable dropdown input.</td>
+      <td><code>npx pejay-ui add dropdown/select-input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add dropdown/select-input')">Copy</button></td>
+    </tr>
+    <tr>
+      <td><strong>dropdown/multiselect-input</strong></td>
+      <td>Searchable multiselect dropdown with dismissible tag pills.</td>
+      <td><code>npx pejay-ui add dropdown/multiselect-input</code></td>
+      <td><button onclick="navigator.clipboard.writeText('npx pejay-ui add dropdown/multiselect-input')">Copy</button></td>
+    </tr>
+  </tbody>
+</table>
