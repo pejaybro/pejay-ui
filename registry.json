@@ -3,7 +3,7 @@
     "name": "Button",
     "category": "button",
     "files": [
-      "templates/button/button.tsx",
+      "templates/button/Button.tsx",
       "templates/button/tooltip.tsx"
     ],
     "utils": [
