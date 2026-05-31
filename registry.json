@@ -315,7 +315,7 @@
       "lucide-react"
     ]
   },
-  "select-dropdown/select-input": {
+  "dropdown/select-input": {
     "name": "SelectInput",
     "category": "select-dropdown",
     "files": [
@@ -331,7 +331,7 @@
       "@floating-ui/react"
     ]
   },
-  "select-dropdown/multiselect-input": {
+  "dropdown/multiselect-input": {
     "name": "MultiselectInput",
     "category": "select-dropdown",
     "files": [
