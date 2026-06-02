@@ -1,6 +1,6 @@
 {
   "name": "pejay-ui",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "type": "module",
   "description": "react ui components",
   "bin": {
@@ -22,6 +22,7 @@
   "dependencies": {
     "@babel/core": "^7.24.0",
     "@babel/preset-typescript": "^7.24.0",
+    "@tanstack/react-query": "^5.100.14",
     "commander": "^12.0.0",
     "fs-extra": "^11.0.0",
     "inquirer": "^9.0.0"

@@ -21,6 +21,23 @@ const prompt = async (questions) => {
   return inquirer.default.prompt(questions);
 };
 
+// Helper to get all files recursively from a directory
+const getFilesRecursively = async (dir) => {
+  let results = [];
+  const list = await fs.readdir(dir);
+  for (const file of list) {
+    const filePath = path.join(dir, file);
+    const stat = await fs.stat(filePath);
+    if (stat && stat.isDirectory()) {
+      const subFiles = await getFilesRecursively(filePath);
+      results = results.concat(subFiles);
+    } else {
+      results.push(filePath);
+    }
+  }
+  return results;
+};
+
 program
   .name("pejay-ui")
   .description("CLI to initialize, add, and remove React UI components")
@@ -178,7 +195,12 @@ program
         }
 
         // 3. Process & Copy Component Files
-        const targetDir = path.join(cwd, config.baseDir, "components", componentData.category);
+        let targetDir;
+        if (componentData.category === "tanstack-query") {
+          targetDir = path.join(cwd, "src", "tanstack-query");
+        } else {
+          targetDir = path.join(cwd, config.baseDir, "components", componentData.category);
+        }
         const outputExt = isTsProject ? "tsx" : "jsx";
 
         // Determine list of files to copy
@@ -192,29 +214,70 @@ program
             process.exit(1);
           }
 
-          const filename = path.basename(srcFilePath).replace(/\.(tsx|ts)$/, (match) => {
-            return match === ".tsx" ? `.${outputExt}` : `.${isTsProject ? "ts" : "js"}`;
-          });
-          const targetFile = path.join(targetDir, filename);
+          const isDir = (await fs.stat(templateSrc)).isDirectory();
+          if (isDir) {
+            const allFiles = await getFilesRecursively(templateSrc);
+            for (const file of allFiles) {
+              const relativePath = path.relative(templateSrc, file);
+              const filename = relativePath.replace(/\.(tsx|ts)$/, (match) => {
+                return match === ".tsx" ? `.${outputExt}` : `.${isTsProject ? "ts" : "js"}`;
+              });
+              const targetFile = path.join(targetDir, filename);
 
-          let componentCode = await fs.readFile(templateSrc, "utf-8");
+              let componentCode = await fs.readFile(file, "utf-8");
 
-          // Replace `@/utils/cn` with relative path to the local utils/cn folder
-          const cnImportPath = isTsProject ? "../../utils/cn" : "../../utils/cn.js";
-          componentCode = componentCode.replace(/@\/utils\/cn/g, cnImportPath);
+              const fileDir = path.dirname(targetFile);
+              const relativeToUtils = path.relative(fileDir, targetUtilsDir).replace(/\\/g, "/");
+              const cnImportPath = isTsProject 
+                ? `${relativeToUtils}/cn` 
+                : `${relativeToUtils}/cn.js`;
+              componentCode = componentCode.replace(/@\/utils\/cn/g, cnImportPath);
 
-          if (!isTsProject) {
-            const transformed = babel.transformSync(componentCode, {
-              presets: ["@babel/preset-typescript"],
-              filename: path.basename(srcFilePath),
+              if (!isTsProject) {
+                const transformed = babel.transformSync(componentCode, {
+                  presets: ["@babel/preset-typescript"],
+                  filename: path.basename(file),
+                });
+                componentCode = transformed?.code || componentCode;
+              }
+
+              await fs.ensureDir(path.dirname(targetFile));
+              await fs.writeFile(targetFile, componentCode, "utf-8");
+              
+              const relativeTargetFile = path.relative(cwd, targetFile).replace(/\\/g, "/");
+              console.log(`✅ Created ${relativeTargetFile}`);
+              installedFiles.push(path.relative(path.join(cwd, config.baseDir), targetFile).replace(/\\/g, "/"));
+            }
+          } else {
+            const filename = path.basename(srcFilePath).replace(/\.(tsx|ts)$/, (match) => {
+              return match === ".tsx" ? `.${outputExt}` : `.${isTsProject ? "ts" : "js"}`;
             });
-            componentCode = transformed?.code || componentCode;
-          }
+            const targetFile = path.join(targetDir, filename);
 
-          await fs.ensureDir(targetDir);
-          await fs.writeFile(targetFile, componentCode, "utf-8");
-          console.log(`✅ Created components/${componentData.category}/${filename}`);
-          installedFiles.push(path.join("components", componentData.category, filename));
+            let componentCode = await fs.readFile(templateSrc, "utf-8");
+
+            const fileDir = path.dirname(targetFile);
+            const relativeToUtils = path.relative(fileDir, targetUtilsDir).replace(/\\/g, "/");
+            const cnImportPath = isTsProject 
+              ? `${relativeToUtils}/cn` 
+              : `${relativeToUtils}/cn.js`;
+            componentCode = componentCode.replace(/@\/utils\/cn/g, cnImportPath);
+
+            if (!isTsProject) {
+              const transformed = babel.transformSync(componentCode, {
+                presets: ["@babel/preset-typescript"],
+                filename: path.basename(srcFilePath),
+              });
+              componentCode = transformed?.code || componentCode;
+            }
+
+            await fs.ensureDir(targetDir);
+            await fs.writeFile(targetFile, componentCode, "utf-8");
+            
+            const relativeTargetFile = path.relative(cwd, targetFile).replace(/\\/g, "/");
+            console.log(`✅ Created ${relativeTargetFile}`);
+            installedFiles.push(path.relative(path.join(cwd, config.baseDir), targetFile).replace(/\\/g, "/"));
+          }
         }
 
         // 4. Update State tracking in config

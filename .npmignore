@@ -1,0 +1,20 @@
+# Local Development and Test Application
+test-app/
+
+# Environment and Authentication secrets
+.npmrc
+
+# Node & Package manager files
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Git configuration
+.git/
+.gitignore
+
+# TypeScript configuration (only templates are published)
+tsconfig.json
+others/

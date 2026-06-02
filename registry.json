@@ -2,328 +2,174 @@
   "button": {
     "name": "Button",
     "category": "button",
-    "files": [
-      "templates/button/Button.tsx",
-      "templates/button/tooltip.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge"
-    ]
+    "files": ["templates/button/Button.tsx", "templates/button/tooltip.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge"]
   },
   "form/input": {
     "name": "Input",
     "category": "form",
-    "files": [
-      "templates/form/input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge",
-      "lucide-react"
-    ]
+    "files": ["templates/form/input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
   },
   "form/amount-input": {
     "name": "AmountInput",
     "category": "form",
-    "files": [
-      "templates/form/amount-input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge",
-      "lucide-react"
-    ]
+    "files": ["templates/form/amount-input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
   },
   "form/checkbox": {
     "name": "Checkbox",
     "category": "form",
-    "files": [
-      "templates/form/checkbox.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge",
-      "lucide-react"
-    ]
+    "files": ["templates/form/checkbox.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
   },
   "form/checkbox-group": {
     "name": "CheckboxGroup",
     "category": "form",
-    "files": [
-      "templates/form/checkbox-group.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge"
-    ],
-    "dependencies": [
-      "form/checkbox"
-    ]
+    "files": ["templates/form/checkbox-group.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge"],
+    "dependencies": ["form/checkbox"]
   },
   "form/date-picker": {
     "name": "DatePicker",
     "category": "form",
-    "files": [
-      "templates/form/date-picker.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
+    "files": ["templates/form/date-picker.tsx"],
+    "utils": ["cn.ts"],
     "peerDependencies": [
       "clsx",
       "tailwind-merge",
       "lucide-react",
       "@floating-ui/react"
     ],
-    "dependencies": [
-      "select-dropdown/select-input"
-    ]
+    "dependencies": ["select-dropdown/select-input"]
   },
   "form/date-range-picker": {
     "name": "DateRangePicker",
     "category": "form",
-    "files": [
-      "templates/form/date-range-picker.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
+    "files": ["templates/form/date-range-picker.tsx"],
+    "utils": ["cn.ts"],
     "peerDependencies": [
       "clsx",
       "tailwind-merge",
       "lucide-react",
       "@floating-ui/react"
     ],
-    "dependencies": [
-      "select-dropdown/select-input"
-    ]
+    "dependencies": ["select-dropdown/select-input"]
   },
   "form/email-input": {
     "name": "EmailInput",
     "category": "form",
-    "files": [
-      "templates/form/email-input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge",
-      "lucide-react"
-    ]
+    "files": ["templates/form/email-input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
   },
   "form/file-input": {
     "name": "FileInput",
     "category": "form",
-    "files": [
-      "templates/form/file-input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge",
-      "lucide-react"
-    ]
+    "files": ["templates/form/file-input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
   },
   "form/number-input": {
     "name": "NumberInput",
     "category": "form",
-    "files": [
-      "templates/form/number-input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge",
-      "lucide-react"
-    ]
+    "files": ["templates/form/number-input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
   },
   "form/password-input": {
     "name": "PasswordInput",
     "category": "form",
-    "files": [
-      "templates/form/password-input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge",
-      "lucide-react"
-    ]
+    "files": ["templates/form/password-input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
   },
   "form/phone-input": {
     "name": "PhoneInput",
     "category": "form",
-    "files": [
-      "templates/form/phone-input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge",
-      "lucide-react"
-    ]
+    "files": ["templates/form/phone-input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
   },
   "form/radio": {
     "name": "Radio",
     "category": "form",
-    "files": [
-      "templates/form/radio.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge"
-    ]
+    "files": ["templates/form/radio.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge"]
   },
   "form/radio-group": {
     "name": "RadioGroup",
     "category": "form",
-    "files": [
-      "templates/form/radio-group.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge"
-    ],
-    "dependencies": [
-      "form/radio"
-    ]
+    "files": ["templates/form/radio-group.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge"],
+    "dependencies": ["form/radio"]
   },
   "form/range-slider": {
     "name": "RangeSlider",
     "category": "form",
-    "files": [
-      "templates/form/range-slider.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge"
-    ]
+    "files": ["templates/form/range-slider.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge"]
   },
   "form/switch": {
     "name": "Switch",
     "category": "form",
-    "files": [
-      "templates/form/switch.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge"
-    ]
+    "files": ["templates/form/switch.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge"]
   },
   "form/textarea": {
     "name": "Textarea",
     "category": "form",
-    "files": [
-      "templates/form/textarea.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge"
-    ]
+    "files": ["templates/form/textarea.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge"]
   },
   "form/time-picker": {
     "name": "TimePicker",
     "category": "form",
-    "files": [
-      "templates/form/time-picker.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
+    "files": ["templates/form/time-picker.tsx"],
+    "utils": ["cn.ts"],
     "peerDependencies": [
       "clsx",
       "tailwind-merge",
       "lucide-react",
       "@floating-ui/react"
     ],
-    "dependencies": [
-      "select-dropdown/select-input"
-    ]
+    "dependencies": ["select-dropdown/select-input"]
   },
   "form/time-range-picker": {
     "name": "TimeRangePicker",
     "category": "form",
-    "files": [
-      "templates/form/time-range-picker.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
+    "files": ["templates/form/time-range-picker.tsx"],
+    "utils": ["cn.ts"],
     "peerDependencies": [
       "clsx",
       "tailwind-merge",
       "lucide-react",
       "@floating-ui/react"
     ],
-    "dependencies": [
-      "select-dropdown/select-input"
-    ]
+    "dependencies": ["select-dropdown/select-input"]
   },
   "form/url-input": {
     "name": "UrlInput",
     "category": "form",
-    "files": [
-      "templates/form/url-input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
-    "peerDependencies": [
-      "clsx",
-      "tailwind-merge",
-      "lucide-react"
-    ]
+    "files": ["templates/form/url-input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
   },
   "dropdown/select-input": {
     "name": "SelectInput",
     "category": "select-dropdown",
-    "files": [
-      "templates/select-dropdown/select-input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
+    "files": ["templates/select-dropdown/select-input.tsx"],
+    "utils": ["cn.ts"],
     "peerDependencies": [
       "clsx",
       "tailwind-merge",
@@ -334,17 +180,19 @@
   "dropdown/multiselect-input": {
     "name": "MultiselectInput",
     "category": "select-dropdown",
-    "files": [
-      "templates/select-dropdown/multiselect-input.tsx"
-    ],
-    "utils": [
-      "cn.ts"
-    ],
+    "files": ["templates/select-dropdown/multiselect-input.tsx"],
+    "utils": ["cn.ts"],
     "peerDependencies": [
       "clsx",
       "tailwind-merge",
       "lucide-react",
       "@floating-ui/react"
     ]
+  },
+  "tanstack-query-client": {
+    "name": "TanstackQueryClient",
+    "category": "tanstack-query",
+    "files": ["templates/scaffolds/tanstack-query"],
+    "peerDependencies": ["@tanstack/react-query"]
   }
 }

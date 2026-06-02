@@ -129,3 +129,10 @@ Below is the list of components you can add. Each has a copyable command block w
   ```bash
   npx pejay-ui add dropdown/multiselect-input
   ```
+
+### Scaffolds & Templates
+
+* **`tanstack-query-client`**: Bare-bone TanStack Query client and context provider setup, copied directly into your project's `src/tanstack-query/`.
+  ```bash
+  npx pejay-ui add tanstack-query-client
+  ```
