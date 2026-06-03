@@ -156,10 +156,23 @@ program
         }
 
         if (missingDependencies.length > 0) {
-          console.error(`Error: Missing required package dependencies to use '${compToInstall}':`);
-          console.log(`Please run the following command to install them first:`);
-          console.log(`\n  npm install ${missingDependencies.join(" ")}\n`);
-          process.exit(1);
+          console.log(`Missing required package dependencies: ${missingDependencies.join(", ")}`);
+          console.log(`Installing missing dependencies...`);
+
+          let installCmd = `npm install ${missingDependencies.join(" ")}`;
+          if (await fs.pathExists(path.join(cwd, "yarn.lock"))) {
+            installCmd = `yarn add ${missingDependencies.join(" ")}`;
+          } else if (await fs.pathExists(path.join(cwd, "pnpm-lock.yaml"))) {
+            installCmd = `pnpm add ${missingDependencies.join(" ")}`;
+          }
+
+          try {
+            execSync(installCmd, { cwd, stdio: "inherit" });
+            console.log(`\nDependencies installed successfully!\n`);
+          } catch (error) {
+            console.error(`\nFailed to automatically install dependencies. Please run: ${installCmd}`);
+            process.exit(1);
+          }
         }
 
         // 2. Process & Copy Utility dependencies
@@ -196,8 +209,8 @@ program
 
         // 3. Process & Copy Component Files
         let targetDir;
-        if (componentData.category === "tanstack-query") {
-          targetDir = path.join(cwd, "src", "tanstack-query");
+        if (componentData.category === "scaffold") {
+          targetDir = path.join(cwd, "src", componentData.targetDirName || compToInstall);
         } else {
           targetDir = path.join(cwd, config.baseDir, "components", componentData.category);
         }

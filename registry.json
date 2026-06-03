@@ -191,13 +191,17 @@
   },
   "tanstack-query-client": {
     "name": "TanstackQueryClient",
-    "category": "tanstack-query",
+    "category": "scaffold",
+    "subcategory": "tanstack-query",
+    "targetDirName": "tanstack-query",
     "files": ["templates/scaffolds/tanstack-query"],
     "peerDependencies": ["@tanstack/react-query"]
   },
    "react-router-client": {
     "name": "ReactRouterClient",
-    "category": "react-router",
+    "category": "scaffold",
+    "subcategory": "react-router",
+    "targetDirName": "react-router",
     "files": ["templates/scaffolds/react-router"],
     "peerDependencies": ["react-router-dom"]
   }
