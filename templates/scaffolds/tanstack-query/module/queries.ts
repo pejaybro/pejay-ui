@@ -1,4 +1,8 @@
-import { queryOptions, infiniteQueryOptions, keepPreviousData } from "@tanstack/react-query";
+import {
+  queryOptions,
+  infiniteQueryOptions,
+  keepPreviousData,
+} from "@tanstack/react-query";
 
 import { ModuleKeys } from "./keys";
 import { ModuleMappers } from "./mappers";
@@ -15,7 +19,7 @@ export const ModuleQueries = {
         */
         return ModuleService.get_query_name_example();
       },
-      select: (raw) => {
+      select: raw => {
         /* 
         # NOTE: ModuleMappers.fetch_query_name_example() -> manipulates the data from api into desird format before returning to ui or page
         Using the 'select' property memoizes this transformation (only runs when cached data changes).
@@ -50,7 +54,7 @@ export const ModuleQueries = {
         return hasMore ? current_page + 1 : undefined;
       },
       initialPageParam: 1,
-      select: (raw) => {
+      select: raw => {
         /* 
         # NOTE: ModuleMappers.fetch_infinite_query_example() -> manipulates the data from api into desird format before returning to ui or page
         Using the 'select' property memoizes this transformation (only runs when cached data changes).
@@ -76,7 +80,7 @@ export const ModuleQueries = {
         */
         return ModuleService.get_query_with_params_example(params, signal);
       },
-      select: (raw) => {
+      select: raw => {
         // Reusing the same mapper example for consistency
         return ModuleMappers.fetch_query_name_example(raw as any);
       },
@@ -89,7 +93,7 @@ export const ModuleQueries = {
       queryFn: ({ signal }) => {
         return ModuleService.get_query_by_id_example(id!, signal);
       },
-      select: (raw) => {
+      select: raw => {
         return ModuleMappers.fetch_query_name_example(raw as any);
       },
       placeholderData: keepPreviousData,
@@ -100,13 +104,16 @@ export const ModuleQueries = {
       enabled: !!id,
     }),
 
-  fetch_query_combo_example: (id: string | null | undefined, params: Record<string, any>) =>
+  fetch_query_combo_example: (
+    id: string | null | undefined,
+    params: Record<string, any>,
+  ) =>
     queryOptions({
       queryKey: ModuleKeys.fetch_query_combo_example(id || "", params),
       queryFn: ({ signal }) => {
         return ModuleService.get_query_combo_example(id!, params, signal);
       },
-      select: (raw) => {
+      select: raw => {
         return ModuleMappers.fetch_query_name_example(raw as any);
       },
       placeholderData: keepPreviousData,
@@ -129,5 +136,21 @@ export const ModuleQueries = {
    - The `select` function is **automatically memoized** by TanStack Query.
    - It will ONLY re-run when the cached raw data changes. 
    - If the component re-renders for other reasons (e.g., local UI states, parent re-renders, or window focus checks), TanStack Query skips the mapper execution completely and returns the already memoized mapped data instantly.
-*/
 
+
+
+
+
+
+
+
+
+
+
+use this inside queries if you want to show error boundary at component level for perticular query when not using useSuspenseQuery or hook which provides suspense by default. by default it just catches the errror and shows the error in useMutation or useQuery hooks but in case of useSuspenseQuery it throws the error and bubbels up to the nearest error boundary.
+
+    throwOnError: (error) => {
+      // Throw to boundary for severe errors (like 404 Not Found or 500 Server Crashes)
+      return error.status === 404 || error.status >= 500;
+    }
+*/

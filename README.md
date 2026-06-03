@@ -136,3 +136,8 @@ Below is the list of components you can add. Each has a copyable command block w
   ```bash
   npx pejay-ui add tanstack-query-client
   ```
+* **`react-router-client`**: Bare-bone React Router client layout, routing structure, and route guard setup.
+  ```bash
+  npx pejay-ui add react-router-client
+  ```
+

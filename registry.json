@@ -194,5 +194,11 @@
     "category": "tanstack-query",
     "files": ["templates/scaffolds/tanstack-query"],
     "peerDependencies": ["@tanstack/react-query"]
+  },
+   "react-router-client": {
+    "name": "ReactRouterClient",
+    "category": "react-router",
+    "files": ["templates/scaffolds/react-router"],
+    "peerDependencies": ["react-router-dom"]
   }
 }
