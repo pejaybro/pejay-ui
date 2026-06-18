@@ -136,8 +136,23 @@ Below is the list of components you can add. Each has a copyable command block w
   ```bash
   npx pejay-ui add tanstack-query-client
   ```
-* **`react-router-client`**: Bare-bone React Router client layout, routing structure, and route guard setup.
+* **`react-router-client`**: Bare-bone React Router client layout, routing structure, and route guard setup, copied into `src/react-router/`.
   ```bash
   npx pejay-ui add react-router-client
   ```
-
+* **`tanstack-router-client`**: TanStack Router setup with layouts, route guards, and file-based route stubs, copied into `src/tanstack-router/`.
+  ```bash
+  npx pejay-ui add tanstack-router-client
+  ```
+* **`axios-client`**: Axios instance with interceptors, request helpers, and a sample API module, copied into `src/axios/`.
+  ```bash
+  npx pejay-ui add axios-client
+  ```
+* **`redux-store-client`**: Redux Toolkit store setup with `redux-persist`, reducers, slices, and selectors, copied into `src/redux-store/`.
+  ```bash
+  npx pejay-ui add redux-store-client
+  ```
+* **`rtk-query-client`**: RTK Query base API with `fetchBaseQuery`, tag management, middleware, and a sample endpoint, copied into `src/rtk-query/`.
+  ```bash
+  npx pejay-ui add rtk-query-client
+  ```
