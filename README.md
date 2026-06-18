@@ -130,6 +130,13 @@ Below is the list of components you can add. Each has a copyable command block w
   npx pejay-ui add dropdown/multiselect-input
   ```
 
+### Layouts
+
+* **`layouts/lv1`**: A responsive, collapsible sidebar-based application layout.
+  ```bash
+  npx pejay-ui add layouts/lv1
+  ```
+
 ### Scaffolds & Templates
 
 * **`tanstack-query-client`**: Bare-bone TanStack Query client and context provider setup, copied directly into your project's `src/tanstack-query/`.

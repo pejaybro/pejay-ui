@@ -236,5 +236,21 @@
     "targetDirName": "rtk-query",
     "files": ["templates/scaffolds/rtk-query"],
     "peerDependencies": ["@reduxjs/toolkit", "react-redux"]
+  },
+  "layouts/lv1": {
+    "name": "AppLayout",
+    "category": "layouts",
+    "files": [
+      "templates/layouts/lv1/app-layout.tsx",
+      "templates/layouts/lv1/sidebar-menu.tsx",
+      "templates/layouts/lv1/index.ts"
+    ],
+    "utils": ["cn.ts"],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ]
   }
 }
+
