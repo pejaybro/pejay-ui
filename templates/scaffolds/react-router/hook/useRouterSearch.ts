@@ -8,6 +8,10 @@ export function useRouterSearch<T extends Record<string, any>>({
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
+  /*
+   * Keep defaults in a ref so setSearch always reads the latest defaults without
+   * forcing callbacks to be recreated. Prefer passing a stable default object.
+   */
   const defaultRef = useRef(defaultParams);
   defaultRef.current = defaultParams;
 
@@ -18,6 +22,7 @@ export function useRouterSearch<T extends Record<string, any>>({
     for (const key of keys) {
       const fallback = defaultRef.current[key];
       if (Array.isArray(fallback)) {
+        // Repeated URL keys are parsed back into arrays, e.g. ?color=red&color=blue.
         const val = searchParams.getAll(key);
         if (val.length > 0) {
           result[key as keyof T] = parseValue(val, fallback) as any;
@@ -43,9 +48,11 @@ export function useRouterSearch<T extends Record<string, any>>({
       for (const key of keys) {
         const value = updates[key as keyof T];
         if (value !== undefined) {
+          // null or the default value removes the key, keeping URLs shareable and minimal.
           if (value === null || areEqual(value, defaultRef.current[key])) {
             next.delete(key);
           } else if (Array.isArray(value)) {
+            // Delete first so array updates replace previous repeated keys instead of appending to them.
             next.delete(key);
             value.forEach((val) => {
               if (val !== undefined && val !== null && val !== "") {
@@ -78,6 +85,7 @@ export function useRouterSearch<T extends Record<string, any>>({
 function areEqual(a: any, b: any) {
   if (Array.isArray(a) && Array.isArray(b)) {
     if (a.length !== b.length) return false;
+    // Treat array query params as order-insensitive filter sets.
     const sortedA = [...a].sort();
     const sortedB = [...b].sort();
     return sortedA.every((val, index) => val === sortedB[index]);

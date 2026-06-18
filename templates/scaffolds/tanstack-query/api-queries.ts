@@ -58,28 +58,9 @@ return <ModuleComponent data={data} />;
 }
 
 # NOTE : Wrapping
- <ErrorBoundary fallback={<div>Failed to load Stats</div>}>
 <Suspense fallback={<FallBackComponent />}>
   <ModuleComponent />
 </Suspense>
-  </ErrorBoundary>
-
-  this is comp level error boundary in case of api fails then suspense bubbeling up will touch this first and stops 
-  in case this is not present then the router level
-  so in this way we can only show a particaular comp failed to load not entore page
-
-
-
-
-
-  Manually (Option A - useQuery):
-
-Code: if (error) return <ErrorComponent />
-Behavior: Bypasses Error Boundaries. Component-level and router-level boundaries never trigger.
-Automatically (Option B - useSuspenseQuery or useQuery with throwOnError: true):
-
-Code: Component throws the error during render.
-Behavior: The error bubbles up. It triggers the nearest Error Boundary (either your component-level boundary if you wrapped it, or falls back to the router-level boundary).
 
 ---------------------------------------------------------------------------------------------------
 

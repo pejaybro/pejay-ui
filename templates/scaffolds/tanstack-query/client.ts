@@ -9,6 +9,10 @@ export async function apiRequest<T>(
   // const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const token = null;
 
+  /*
+  # NOTE: RequestInit options are spread first so each call can pass signal, method, body, or headers.
+  The final headers spread lets a specific request override defaults when an endpoint needs it.
+  */
   const response = await fetch(`${API_CONFIG.baseUrl}${endpoint}`, {
     ...options,
     headers: {
@@ -18,6 +22,10 @@ export async function apiRequest<T>(
     },
   });
 
+  /*
+  # NOTE: This template assumes every successful response returns JSON.
+  If your API uses 204 No Content or empty delete responses, guard response.status before calling json().
+  */
   if (!response.ok) throw new Error(`Error Code ${response.status}`);
   return (await response.json()) as T;
 }

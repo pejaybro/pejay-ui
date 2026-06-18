@@ -197,12 +197,44 @@
     "files": ["templates/scaffolds/tanstack-query"],
     "peerDependencies": ["@tanstack/react-query"]
   },
-   "react-router-client": {
+  "react-router-client": {
     "name": "ReactRouterClient",
     "category": "scaffold",
     "subcategory": "react-router",
     "targetDirName": "react-router",
     "files": ["templates/scaffolds/react-router"],
     "peerDependencies": ["react-router-dom"]
+  },
+  "tanstack-router-client": {
+    "name": "TanstackRouterClient",
+    "category": "scaffold",
+    "subcategory": "tanstack-router",
+    "targetDirName": "tanstack-router",
+    "files": ["templates/scaffolds/tanstack-router"],
+    "peerDependencies": ["@tanstack/react-router"]
+  },
+  "axios-client": {
+    "name": "AxiosClient",
+    "category": "scaffold",
+    "subcategory": "axios",
+    "targetDirName": "axios",
+    "files": ["templates/scaffolds/axios"],
+    "peerDependencies": ["axios"]
+  },
+  "redux-store-client": {
+    "name": "ReduxStoreClient",
+    "category": "scaffold",
+    "subcategory": "redux-store",
+    "targetDirName": "redux-store",
+    "files": ["templates/scaffolds/redux-store"],
+    "peerDependencies": ["@reduxjs/toolkit", "react-redux", "redux-persist"]
+  },
+  "rtk-query-client": {
+    "name": "RtkQueryClient",
+    "category": "scaffold",
+    "subcategory": "rtk-query",
+    "targetDirName": "rtk-query",
+    "files": ["templates/scaffolds/rtk-query"],
+    "peerDependencies": ["@reduxjs/toolkit", "react-redux"]
   }
 }

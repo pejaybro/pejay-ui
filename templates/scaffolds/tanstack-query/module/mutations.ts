@@ -14,6 +14,10 @@ export const ModuleMutations = {
         2. Snapshot the current cache value.
         3. Optimistically insert the new item into the cache.
         4. Return context containing the previous value for error rollbacks.
+
+        # EDGE CASE:
+        setQueryData updates the raw cached query data, not the value returned by a query select mapper.
+        Match this optimistic shape to the actual API response shape stored in the cache.
         */
         await queryClient.cancelQueries({ queryKey: ModuleKeys.fetch_query_name_example() });
 
@@ -46,7 +50,7 @@ export const ModuleMutations = {
         }
       },
       onSettled: async () => {
-        // Always refetch after error or success to keep server in sync
+        // Always refetch after error or success to keep server state authoritative after optimistic changes.
         await queryClient.invalidateQueries({
           queryKey: ModuleKeys.fetch_query_name_example(),
         });

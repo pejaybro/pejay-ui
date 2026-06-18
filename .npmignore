@@ -18,3 +18,5 @@ yarn-error.log*
 # TypeScript configuration (only templates are published)
 tsconfig.json
 others/
+demo/
+*.ps1

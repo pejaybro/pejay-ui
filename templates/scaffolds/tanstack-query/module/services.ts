@@ -7,6 +7,10 @@ export const ModuleService = {
   get_query_with_params_example: (params: Record<string, any>, signal?: AbortSignal) => {
     const queryParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
+      /*
+      # NOTE: Arrays become repeated keys, e.g. brands=samsung&brands=apple.
+      Empty values are skipped so default UI state does not create noisy URLs.
+      */
       if (Array.isArray(value)) {
         value.forEach((val) => {
           if (val !== undefined && val !== null && val !== "") {
@@ -24,6 +28,10 @@ export const ModuleService = {
   get_query_combo_example: (id: string, params: Record<string, any>, signal?: AbortSignal) => {
     const queryParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
+      /*
+      # NOTE: Reuse the same serialization rules for route-specific filtered requests.
+      Keeping this logic centralized avoids components building query strings by hand.
+      */
       if (Array.isArray(value)) {
         value.forEach((val) => {
           if (val !== undefined && val !== null && val !== "") {

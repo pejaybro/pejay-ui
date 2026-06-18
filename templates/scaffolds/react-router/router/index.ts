@@ -8,6 +8,10 @@ import { MainLayout } from "./layouts/main.layout";
 
 const PublicRoutes: RouteObject[] = [
   {
+    /*
+    # NOTE: Guard routes without a path run before their children.
+    This keeps auth decisions centralized while the nested layout controls shared UI.
+    */
     Component: PublicRoute,
     children: [
       {
@@ -29,6 +33,10 @@ const PublicRoutes: RouteObject[] = [
 
 const PrivateRoutes: RouteObject[] = [
   {
+    /*
+    # NOTE: PrivateRoute can block or redirect every route below it.
+    Any child route added here automatically inherits the same auth requirement.
+    */
     Component: PrivateRoute,
     children: [
       {
@@ -78,6 +86,7 @@ const NotFoundRoutes: RouteObject[] = [
 export const router = createBrowserRouter([
   ...PublicRoutes,
   ...PrivateRoutes,
+  // Keep the wildcard route last so specific public/private routes get matched first.
   ...NotFoundRoutes,
 ]);
 
@@ -181,6 +190,23 @@ export function useDocumentTitle(title: string) {
 2. **Why we use Component-level skeletons:**
    - **Data Loading:** Once the page code is downloaded and mounted, your API data fetching starts.
    - **Interactive UI:** This is where you render custom skeleton loaders inside your page components while waiting for TanStack Query data, offering a premium and localized loading layout.
+
+   -------------------------------------------------------------------------------------
+
+   {
+  path: PATH.loads(),
+  handle: {
+    title: PAGE_TITLE.loads,
+  },
+  Component: LoadsPage,
+}
+
+import { useMatches } from "react-router";
+
+const matches = useMatches();
+
+const currentTitle =
+  matches[matches.length - 1]?.handle?.title ?? "";
  */
 
 

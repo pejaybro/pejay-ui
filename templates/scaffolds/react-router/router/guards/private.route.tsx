@@ -46,6 +46,7 @@ export default function LoginPage() {
 
   const handleLoginSuccess = () => {
     // 1. Read the redirectTo value (e.g., "/page_two") or default to "/"
+    //    In production, validate this stays an internal path before navigating.
     const destination = searchParams.get("redirectTo") || "/";
 
     // 2. Redirect the user back to their bookmarked page instead of the root page!
