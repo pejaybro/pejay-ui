@@ -74,7 +74,9 @@ program
 program
   .command("add <component>")
   .description("Add a component to your project")
-  .action(async (component) => {
+  .option("--all", "Add all components in the category")
+  .option("--select", "Select specific components from the category to add")
+  .action(async (component, options) => {
     try {
       const cwd = process.cwd();
       const configPath = path.join(cwd, "pejay-ui.json");
@@ -95,6 +97,46 @@ program
       const registry = await fs.readJSON(registryPath);
       const isTsProject = await fs.pathExists(path.join(cwd, "tsconfig.json"));
 
+      // Determine which components to install
+      let selectedComponents = [];
+
+      // Check if it's a category
+      const categoryComponents = Object.keys(registry).filter(
+        (key) => registry[key].category === component
+      );
+
+      if (categoryComponents.length > 0) {
+        if (options.all) {
+          selectedComponents = categoryComponents;
+        } else {
+          // Dynamic prompt using inquirer checkbox for --select or when no flag is specified for category
+          const answers = await prompt([
+            {
+              type: "checkbox",
+              name: "components",
+              message: `Select components from category "${component}" to add:`,
+              choices: categoryComponents.map((key) => ({
+                name: `${registry[key].name} (${key})`,
+                value: key,
+              })),
+            },
+          ]);
+          selectedComponents = answers.components;
+          if (selectedComponents.length === 0) {
+            console.log("No components selected. Exiting.");
+            process.exit(0);
+          }
+        }
+      } else {
+        // Not a category, treat as a single component key
+        if (!registry[component]) {
+          console.error(`Error: Component or Category '${component}' not found in registry.`);
+          console.log(`Available categories/components: ${Array.from(new Set(Object.values(registry).map(c => c.category).filter(Boolean))).join(", ")} or ${Object.keys(registry).join(", ")}`);
+          process.exit(1);
+        }
+        selectedComponents = [component];
+      }
+
       // Track all components to install (including dependencies) in topological/order of dependencies
       const installQueue = [];
       const visited = new Set();
@@ -106,7 +148,6 @@ program
         const compData = registry[compName];
         if (!compData) {
           console.error(`Error: Component '${compName}' not found in registry.`);
-          console.log(`Available components: ${Object.keys(registry).join(", ")}`);
           process.exit(1);
         }
 
@@ -120,13 +161,15 @@ program
         installQueue.push(compName);
       };
 
-      resolveDependencies(component);
+      for (const comp of selectedComponents) {
+        resolveDependencies(comp);
+      }
 
       console.log("\n🚀 Starting installation...\n");
 
       for (const compToInstall of installQueue) {
-        // Skip if already marked as installed in config (unless it is the main component requested)
-        if (config.installed?.[compToInstall] && compToInstall !== component) {
+        // Skip if already marked as installed in config (unless it is one of the explicitly requested components)
+        if (config.installed?.[compToInstall] && !selectedComponents.includes(compToInstall)) {
           console.log(`Component '${compToInstall}' is already installed. Skipping dependency installation.`);
           continue;
         }
@@ -293,6 +336,56 @@ program
           }
         }
 
+        // 3.5 Automatically generate/update category-level and global index.ts/index.js files
+        if (componentData.category && !["scaffold", "scaffolds", "script", "scripts"].includes(componentData.category.toLowerCase())) {
+          const indexExt = isTsProject ? "ts" : "js";
+          const filesInDir = await fs.readdir(targetDir);
+          const exportableFiles = [];
+
+          for (const file of filesInDir) {
+            const filePath = path.join(targetDir, file);
+            const stat = await fs.stat(filePath);
+            if (stat.isFile()) {
+              const ext = path.extname(file);
+              const name = path.basename(file, ext);
+              if ((ext === ".tsx" || ext === ".ts" || ext === ".jsx" || ext === ".js") && name !== "index") {
+                exportableFiles.push(name);
+              }
+            }
+          }
+
+          if (exportableFiles.length > 0) {
+            exportableFiles.sort();
+            const indexFilePath = path.join(targetDir, `index.${indexExt}`);
+            const exportLines = exportableFiles.map(name => `export * from "./${name}";`);
+            await fs.writeFile(indexFilePath, exportLines.join("\n") + "\n", "utf-8");
+            console.log(`✅ Updated index.${indexExt} in ${path.relative(cwd, targetDir)}`);
+
+            // Also update the global components index file
+            const componentsDir = path.dirname(targetDir); // src/pejay-ui/components
+            if (await fs.pathExists(componentsDir)) {
+              const categories = await fs.readdir(componentsDir);
+              const validCategories = [];
+              for (const cat of categories) {
+                const catDir = path.join(componentsDir, cat);
+                const catStat = await fs.stat(catDir);
+                if (catStat.isDirectory()) {
+                  if (await fs.pathExists(path.join(catDir, `index.ts`)) || await fs.pathExists(path.join(catDir, `index.js`))) {
+                    validCategories.push(cat);
+                  }
+                }
+              }
+              if (validCategories.length > 0) {
+                validCategories.sort();
+                const globalIndexFile = path.join(componentsDir, `index.${indexExt}`);
+                const globalExportLines = validCategories.map(cat => `export * from "./${cat}";`);
+                await fs.writeFile(globalIndexFile, globalExportLines.join("\n") + "\n", "utf-8");
+                console.log(`✅ Updated global index.${indexExt} in ${path.relative(cwd, componentsDir)}`);
+              }
+            }
+          }
+        }
+
         // 4. Update State tracking in config
         config.installed = config.installed || {};
         config.installed[compToInstall] = {
@@ -355,6 +448,73 @@ program
         if (await fs.pathExists(fullPath)) {
           await fs.remove(fullPath);
           console.log(`🗑️ Removed ${relFile}`);
+        }
+      }
+
+      // 1.5 Update index files
+      if (componentData.category && !["scaffold", "scaffolds", "script", "scripts"].includes(componentData.category.toLowerCase())) {
+        const isTsProject = await fs.pathExists(path.join(cwd, "tsconfig.json"));
+        const targetDir = path.join(cwd, config.baseDir, "components", componentData.category);
+        const indexExt = isTsProject ? "ts" : "js";
+        
+        if (await fs.pathExists(targetDir)) {
+          const filesInDir = await fs.readdir(targetDir);
+          const exportableFiles = [];
+          
+          for (const file of filesInDir) {
+            const filePath = path.join(targetDir, file);
+            const stat = await fs.stat(filePath);
+            if (stat.isFile()) {
+              const ext = path.extname(file);
+              const name = path.basename(file, ext);
+              if ((ext === ".tsx" || ext === ".ts" || ext === ".jsx" || ext === ".js") && name !== "index") {
+                exportableFiles.push(name);
+              }
+            }
+          }
+
+          const indexFilePath = path.join(targetDir, `index.${indexExt}`);
+          if (exportableFiles.length > 0) {
+            exportableFiles.sort();
+            const exportLines = exportableFiles.map(name => `export * from "./${name}";`);
+            await fs.writeFile(indexFilePath, exportLines.join("\n") + "\n", "utf-8");
+            console.log(`✅ Updated index.${indexExt} in ${path.relative(cwd, targetDir)}`);
+          } else {
+            // No files left, delete the category index file
+            if (await fs.pathExists(indexFilePath)) {
+              await fs.remove(indexFilePath);
+              console.log(`🗑️ Removed empty index.${indexExt} in ${path.relative(cwd, targetDir)}`);
+            }
+          }
+
+          // Also update the global components index file
+          const componentsDir = path.dirname(targetDir);
+          if (await fs.pathExists(componentsDir)) {
+            const categories = await fs.readdir(componentsDir);
+            const validCategories = [];
+            for (const cat of categories) {
+              const catDir = path.join(componentsDir, cat);
+              const catStat = await fs.stat(catDir);
+              if (catStat.isDirectory()) {
+                if (await fs.pathExists(path.join(catDir, `index.ts`)) || await fs.pathExists(path.join(catDir, `index.js`))) {
+                  validCategories.push(cat);
+                }
+              }
+            }
+            const globalIndexFile = path.join(componentsDir, `index.${indexExt}`);
+            if (validCategories.length > 0) {
+              validCategories.sort();
+              const globalExportLines = validCategories.map(cat => `export * from "./${cat}";`);
+              await fs.writeFile(globalIndexFile, globalExportLines.join("\n") + "\n", "utf-8");
+              console.log(`✅ Updated global index.${indexExt} in ${path.relative(cwd, componentsDir)}`);
+            } else {
+              // No categories left with index files, remove the global index
+              if (await fs.pathExists(globalIndexFile)) {
+                await fs.remove(globalIndexFile);
+                console.log(`🗑️ Removed empty global index.${indexExt} in ${path.relative(cwd, componentsDir)}`);
+              }
+            }
+          }
         }
       }
 
@@ -449,6 +609,88 @@ program
 
     } catch (err) {
       console.error("\n❌ Remove failed\n", err);
+    }
+  });
+
+/* =============================
+   STATUS COMMAND
+============================= */
+program
+  .command("status")
+  .description("List all available components and check their installation status")
+  .action(async () => {
+    try {
+      const cwd = process.cwd();
+      const configPath = path.join(cwd, "pejay-ui.json");
+
+      let config = { installed: {} };
+      let hasConfig = true;
+
+      if (!await fs.pathExists(configPath)) {
+        hasConfig = false;
+      } else {
+        try {
+          config = await fs.readJSON(configPath);
+        } catch (e) {
+          hasConfig = false;
+        }
+      }
+
+      const registryPath = path.join(packageRoot, "registry.json");
+      if (!await fs.pathExists(registryPath)) {
+        console.error("Error: Registry configuration not found.");
+        process.exit(1);
+      }
+
+      const registry = await fs.readJSON(registryPath);
+
+      // Terminal styling colors
+      const GREEN = "\x1b[32m";
+      const CYAN = "\x1b[36m";
+      const DIM = "\x1b[2m";
+      const RESET = "\x1b[0m";
+      const YELLOW = "\x1b[33m";
+
+      console.log(`\n🔍 ${CYAN}pejay-ui Components Status:${RESET}\n`);
+
+      if (!hasConfig) {
+        console.log(`${YELLOW}Note: pejay-ui.json not found. Initialize first via 'npx pejay-ui init'.${RESET}`);
+        console.log(`${YELLOW}Showing all components as uninstalled.${RESET}\n`);
+      }
+
+      // Group registry items by category
+      const categories = {};
+      for (const [key, compData] of Object.entries(registry)) {
+        const category = compData.category || "other";
+        if (!categories[category]) {
+          categories[category] = [];
+        }
+        categories[category].push({
+          key,
+          name: compData.name,
+          installed: !!config.installed?.[key]
+        });
+      }
+
+      // Print categories and components sorted alphabetically
+      const sortedCategoryNames = Object.keys(categories).sort();
+      for (const cat of sortedCategoryNames) {
+        console.log(`${CYAN}Category: ${cat}${RESET}`);
+        const comps = categories[cat];
+        comps.sort((a, b) => a.name.localeCompare(b.name));
+
+        for (const comp of comps) {
+          if (comp.installed) {
+            console.log(`  ${GREEN}[✔] ${comp.name}${RESET} ${DIM}(${comp.key})${RESET}`);
+          } else {
+            console.log(`  [ ] ${comp.name} ${DIM}(${comp.key})${RESET}`);
+          }
+        }
+        console.log(); // blank line between categories
+      }
+
+    } catch (err) {
+      console.error("\n❌ Status display failed\n", err);
     }
   });
 

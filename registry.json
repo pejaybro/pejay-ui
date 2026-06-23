@@ -46,7 +46,7 @@
       "lucide-react",
       "@floating-ui/react"
     ],
-    "dependencies": ["select-dropdown/select-input"]
+    "dependencies": ["dropdown/select-input"]
   },
   "form/date-range-picker": {
     "name": "DateRangePicker",
@@ -59,7 +59,7 @@
       "lucide-react",
       "@floating-ui/react"
     ],
-    "dependencies": ["select-dropdown/select-input"]
+    "dependencies": ["dropdown/select-input"]
   },
   "form/email-input": {
     "name": "EmailInput",
@@ -143,7 +143,7 @@
       "lucide-react",
       "@floating-ui/react"
     ],
-    "dependencies": ["select-dropdown/select-input"]
+    "dependencies": ["dropdown/select-input"]
   },
   "form/time-range-picker": {
     "name": "TimeRangePicker",
@@ -156,7 +156,7 @@
       "lucide-react",
       "@floating-ui/react"
     ],
-    "dependencies": ["select-dropdown/select-input"]
+    "dependencies": ["dropdown/select-input"]
   },
   "form/url-input": {
     "name": "UrlInput",
