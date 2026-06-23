@@ -63,28 +63,33 @@ Write-Output "Installing dependencies"
 
 
 $availablePackages = @(
-    "@reduxjs/toolkit",
     "@tailwindcss/vite",
-    "clsx",
-    "date-fns",
-    "dayjs",
-    "floating-ui",
-    "lucide-react",
-    "react-form-hook",
-    "react-redux",
-    "react-router-dom",
-    "tailwind-merge",
     "tailwindcss",
-    "tanstack-query",
+    "tailwind-merge",
+    "clsx",
+    "react-hook-form",
+    "react-router-dom",
+    "@tanstack/react-query",
+    "@tanstack/react-router",
+    "@reduxjs/toolkit",
+    "react-redux",
+    "redux-persist",
+    "lucide-react",
+    "react-icons",
+    "axios",   
+    "zustand",
     "zod",
-    "zustand"
+    "@hookform/resolvers",
+    "@floating-ui/react",
+    "framer-motion"
 )
 
 $selectedPackages = Show-MultiSelect -Options $availablePackages -Title "Select packages to install (SPACE to toggle, ENTER to confirm):"
 
 if ($selectedPackages.Count -gt 0) {
     npm install
-    npm install $selectedPackages
+    $packageString = $selectedPackages -join " "
+    Invoke-Expression "npm install $packageString"
 } else {
     Write-Output "No packages selected, skipping..."
 }
@@ -270,49 +275,66 @@ Set-Content "components/global/index.ts" ""
 mkdir hooks
 Set-Content "hooks/index.ts" ""
 
-mkdir lib
-Set-Content "lib/index.ts" ""
-
-mkdir routes
-Set-Content "routes/index.ts" ""
-mkdir routes/dashboard
-Set-Content "routes/dashboard/index.ts" ""
-mkdir routes/dashboard/components
-Set-Content "routes/dashboard/components/index.ts" ""
-mkdir routes/dashboard/hooks
-Set-Content "routes/dashboard/hooks/index.ts" ""
-mkdir routes/auth
-Set-Content "routes/auth/index.ts" ""
-mkdir routes/auth/components
-Set-Content "routes/auth/components/index.ts" ""
-mkdir routes/auth/hooks
-Set-Content "routes/auth/hooks/index.ts" ""
-
-mkdir router
-mkdir router/guards
-Set-Content "router/guards/guard.public.ts" ""
-Set-Content "router/guards/guard.private.ts" ""
-mkdir router/layout
-Set-Content "router/layout/layout.public.ts" ""
-Set-Content "router/layout/layout.main.ts" ""
-Set-Content "router/layout/layout.auth.ts" ""
-Set-Content "router/index.ts" ""
-
-mkdir providers
-Set-Content "providers/index.ts" ""
-Set-Content "providers/app.provider.ts" ""
-
-mkdir services
-Set-Content "services/index.ts" ""
-mkdir services/dashboard
-mkdir services/auth
-
-mkdir store
-Set-Content "store/index.ts" ""
-
 mkdir utils
 Set-Content "utils/index.ts" ""
 
 Set-Location ..
+
+# ─────────────────────────────────────────
+# pejay-ui initialization and scaffolding
+# ─────────────────────────────────────────
+$needsInit = $false
+$templatesToAdd = @()
+
+if ($selectedPackages -contains "axios") {
+    $needsInit = $true
+    $templatesToAdd += "axios-client"
+}
+if ($selectedPackages -contains "@tanstack/react-query") {
+    $needsInit = $true
+    $templatesToAdd += "tanstack-query-client"
+}
+if ($selectedPackages -contains "@tanstack/react-router") {
+    $needsInit = $true
+    $templatesToAdd += "tanstack-router-client"
+}
+if ($selectedPackages -contains "react-router-dom") {
+    $needsInit = $true
+    $templatesToAdd += "react-router-client"
+}
+if ($selectedPackages -contains "@reduxjs/toolkit" -or $selectedPackages -contains "react-redux") {
+    $needsInit = $true
+    if ($selectedPackages -contains "redux-persist") {
+        $templatesToAdd += "redux-store-client"
+    } else {
+        Write-Output ""
+        Write-Output "You selected Redux. Which template would you like to add?"
+        Write-Output "1) Redux Store (redux-store-client)"
+        Write-Output "2) RTK Query (rtk-query-client)"
+        Write-Output "3) Both"
+        Write-Output "4) None"
+        $reduxChoice = Read-Host "Select option (1-4, default 1)"
+        if ($reduxChoice -eq "2") {
+            $templatesToAdd += "rtk-query-client"
+        } elseif ($reduxChoice -eq "3") {
+            $templatesToAdd += "redux-store-client"
+            $templatesToAdd += "rtk-query-client"
+        } elseif ($reduxChoice -eq "4") {
+            # None
+        } else {
+            $templatesToAdd += "redux-store-client"
+        }
+    }
+}
+
+if ($needsInit) {
+    Write-Output "`nInitializing pejay-ui..."
+    npx pejay-ui init
+
+    foreach ($template in $templatesToAdd) {
+        Write-Output "Adding template: $template..."
+        npx pejay-ui add $template
+    }
+}
 
 Write-Output "✅ Project '$projectName' setup complete!"

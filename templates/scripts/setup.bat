@@ -29,21 +29,25 @@ echo.
 
 set "packages="
 
-call :ask "@reduxjs/toolkit"
 call :ask "@tailwindcss/vite"
-call :ask "clsx"
-call :ask "date-fns"
-call :ask "dayjs"
-call :ask "@floating-ui/react"
-call :ask "lucide-react"
-call :ask "react-hook-form"
-call :ask "react-redux"
-call :ask "react-router-dom"
-call :ask "tailwind-merge"
 call :ask "tailwindcss"
+call :ask "tailwind-merge"
+call :ask "clsx"
+call :ask "react-hook-form"
+call :ask "react-router-dom"
 call :ask "@tanstack/react-query"
-call :ask "zod"
+call :ask "@tanstack/react-router"
+call :ask "@reduxjs/toolkit"
+call :ask "react-redux"
+call :ask "redux-persist"
+call :ask "lucide-react"
+call :ask "react-icons"
+call :ask "axios"
 call :ask "zustand"
+call :ask "zod"
+call :ask "@hookform/resolvers"
+call :ask "@floating-ui/react"
+call :ask "framer-motion"
 
 if not "!packages!"=="" (
     echo.
@@ -222,50 +226,89 @@ type nul > components\global\index.ts
 mkdir hooks
 type nul > hooks\index.ts
 
-mkdir lib
-type nul > lib\index.ts
-
-mkdir routes
-type nul > routes\index.ts
-mkdir routes\dashboard
-type nul > routes\dashboard\index.ts
-mkdir routes\dashboard\components
-type nul > routes\dashboard\components\index.ts
-mkdir routes\dashboard\hooks
-type nul > routes\dashboard\hooks\index.ts
-mkdir routes\auth
-type nul > routes\auth\index.ts
-mkdir routes\auth\components
-type nul > routes\auth\components\index.ts
-mkdir routes\auth\hooks
-type nul > routes\auth\hooks\index.ts
-
-mkdir router
-mkdir router\guards
-type nul > router\guards\guard.public.ts
-type nul > router\guards\guard.private.ts
-mkdir router\layout
-type nul > router\layout\layout.public.ts
-type nul > router\layout\layout.main.ts
-type nul > router\layout\layout.auth.ts
-type nul > router\index.ts
-
-mkdir providers
-type nul > providers\index.ts
-type nul > providers\app.provider.ts
-
-mkdir services
-type nul > services\index.ts
-mkdir services\dashboard
-mkdir services\auth
-
-mkdir store
-type nul > store\index.ts
-
 mkdir utils
 type nul > utils\index.ts
 
 cd ..
+
+:: ─────────────────────────────────────────
+:: pejay-ui initialization and scaffolding
+:: ─────────────────────────────────────────
+set "hasAxios="
+set "hasTanstackQuery="
+set "hasTanstackRouter="
+set "hasReactRouter="
+set "hasRedux="
+set "hasPersist="
+
+for %%p in (!packages!) do (
+    if "%%p"=="axios" set "hasAxios=1"
+    if "%%p"=="@tanstack/react-query" set "hasTanstackQuery=1"
+    if "%%p"=="@tanstack/react-router" set "hasTanstackRouter=1"
+    if "%%p"=="react-router-dom" set "hasReactRouter=1"
+    if "%%p"=="@reduxjs/toolkit" set "hasRedux=1"
+    if "%%p"=="react-redux" set "hasRedux=1"
+    if "%%p"=="redux-persist" set "hasPersist=1"
+)
+
+set "needsInit="
+if defined hasAxios set "needsInit=1"
+if defined hasTanstackQuery set "needsInit=1"
+if defined hasTanstackRouter set "needsInit=1"
+if defined hasReactRouter set "needsInit=1"
+if defined hasRedux set "needsInit=1"
+
+if defined needsInit (
+    echo.
+    echo Initializing pejay-ui...
+    call npx pejay-ui init
+    
+    if defined hasAxios (
+        echo Adding axios-client...
+        call npx pejay-ui add axios-client
+    )
+    if defined hasTanstackQuery (
+        echo Adding tanstack-query-client...
+        call npx pejay-ui add tanstack-query-client
+    )
+    if defined hasTanstackRouter (
+        echo Adding tanstack-router-client...
+        call npx pejay-ui add tanstack-router-client
+    )
+    if defined hasReactRouter (
+        echo Adding react-router-client...
+        call npx pejay-ui add react-router-client
+    )
+    if defined hasRedux (
+        if defined hasPersist (
+            echo Adding redux-store-client...
+            call npx pejay-ui add redux-store-client
+        ) else (
+            echo.
+            echo You selected Redux. Which template would you like to add?
+            echo [1] Redux Store (redux-store-client)
+            echo [2] RTK Query (rtk-query-client)
+            echo [3] Both
+            echo [4] None
+            set "reduxAns=1"
+            set /p "reduxAns=Enter choice (1-4, default 1): "
+            if "!reduxAns!"=="2" (
+                echo Adding rtk-query-client...
+                call npx pejay-ui add rtk-query-client
+            ) else if "!reduxAns!"=="3" (
+                echo Adding redux-store-client...
+                call npx pejay-ui add redux-store-client
+                echo Adding rtk-query-client...
+                call npx pejay-ui add rtk-query-client
+            ) else if "!reduxAns!"=="4" (
+                rem Do nothing
+            ) else (
+                echo Adding redux-store-client...
+                call npx pejay-ui add redux-store-client
+            )
+        )
+    )
+)
 
 echo.
 echo Project '%projectName%' setup complete!
