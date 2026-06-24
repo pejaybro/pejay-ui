@@ -1,0 +1,8 @@
+{
+  "overlays/portal": {
+    "name": "Portal",
+    "category": "overlays",
+    "files": ["templates/overlays/portal.tsx"],
+    "supportsCategory": true
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "toast": {
+    "name": "Toast",
+    "category": "toast",
+    "files": ["templates/toast"],
+    "utils": ["cn.ts"],
+    "dependencies": ["overlays/portal"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
+  }
+}

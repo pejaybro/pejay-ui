@@ -1,0 +1,322 @@
+{
+  "form/input": {
+    "name": "Input",
+    "category": "form",
+    "files": [
+      "templates/form/input.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  },
+  "form/amount-input": {
+    "name": "AmountInput",
+    "category": "form",
+    "files": [
+      "templates/form/amount-input.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  },
+  "form/checkbox": {
+    "name": "Checkbox",
+    "category": "form",
+    "files": [
+      "templates/form/checkbox.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  },
+  "form/checkbox-group": {
+    "name": "CheckboxGroup",
+    "category": "form",
+    "files": [
+      "templates/form/checkbox-group.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "dependencies": [
+      "form/checkbox"
+    ],
+    "supportsCategory": true
+  },
+  "form/date-picker": {
+    "name": "DatePicker",
+    "category": "form",
+    "files": [
+      "templates/form/date-picker.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "@floating-ui/react"
+    ],
+    "dependencies": [
+      "dropdown/select-input"
+    ],
+    "supportsCategory": true
+  },
+  "form/date-range-picker": {
+    "name": "DateRangePicker",
+    "category": "form",
+    "files": [
+      "templates/form/date-range-picker.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "@floating-ui/react"
+    ],
+    "dependencies": [
+      "dropdown/select-input"
+    ],
+    "supportsCategory": true
+  },
+  "form/email-input": {
+    "name": "EmailInput",
+    "category": "form",
+    "files": [
+      "templates/form/email-input.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  },
+  "form/file-input": {
+    "name": "FileInput",
+    "category": "form",
+    "files": [
+      "templates/form/file-input.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  },
+  "form/number-input": {
+    "name": "NumberInput",
+    "category": "form",
+    "files": [
+      "templates/form/number-input.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  },
+  "form/password-input": {
+    "name": "PasswordInput",
+    "category": "form",
+    "files": [
+      "templates/form/password-input.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  },
+  "form/phone-input": {
+    "name": "PhoneInput",
+    "category": "form",
+    "files": [
+      "templates/form/phone-input.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  },
+  "form/radio": {
+    "name": "Radio",
+    "category": "form",
+    "files": [
+      "templates/form/radio.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "supportsCategory": true
+  },
+  "form/radio-group": {
+    "name": "RadioGroup",
+    "category": "form",
+    "files": [
+      "templates/form/radio-group.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "dependencies": [
+      "form/radio"
+    ],
+    "supportsCategory": true
+  },
+  "form/range-slider": {
+    "name": "RangeSlider",
+    "category": "form",
+    "files": [
+      "templates/form/range-slider.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "supportsCategory": true
+  },
+  "form/switch": {
+    "name": "Switch",
+    "category": "form",
+    "files": [
+      "templates/form/switch.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "supportsCategory": true
+  },
+  "form/textarea": {
+    "name": "Textarea",
+    "category": "form",
+    "files": [
+      "templates/form/textarea.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "supportsCategory": true
+  },
+  "form/time-picker": {
+    "name": "TimePicker",
+    "category": "form",
+    "files": [
+      "templates/form/time-picker.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "@floating-ui/react"
+    ],
+    "dependencies": [
+      "dropdown/select-input"
+    ],
+    "supportsCategory": true
+  },
+  "form/time-range-picker": {
+    "name": "TimeRangePicker",
+    "category": "form",
+    "files": [
+      "templates/form/time-range-picker.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "@floating-ui/react"
+    ],
+    "dependencies": [
+      "dropdown/select-input"
+    ],
+    "supportsCategory": true
+  },
+  "form/url-input": {
+    "name": "UrlInput",
+    "category": "form",
+    "files": [
+      "templates/form/url-input.tsx"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  }
+}

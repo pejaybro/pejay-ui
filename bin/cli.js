@@ -38,14 +38,37 @@ const getFilesRecursively = async (dir) => {
   return results;
 };
 
+const loadRegistry = async () => {
+  const registryDir = path.join(packageRoot, "registry");
+  if (!await fs.pathExists(registryDir)) {
+    console.error(`Error: Registry directory not found at ${registryDir}`);
+    process.exit(1);
+  }
+  const files = await fs.readdir(registryDir);
+  const registry = {};
+  for (const file of files) {
+    if (file.endsWith(".json")) {
+      const filePath = path.join(registryDir, file);
+      try {
+        const data = await fs.readJSON(filePath);
+        Object.assign(registry, data);
+      } catch (e) {
+        console.error(`Error reading registry file: ${file}`, e);
+      }
+    }
+  }
+  return registry;
+};
+const pkg = await fs.readJSON(path.join(packageRoot, "package.json"));
+
 program
   .name("pejay-ui")
   .description("CLI to initialize, add, and remove React UI components")
-  .version("1.0.0");
+  .version(pkg.version);
 
 /* =============================
    INIT COMMAND
-============================= */
+ ============================= */
 program
   .command("init")
   .description("Initialize pejay-ui configuration in your project")
@@ -70,7 +93,7 @@ program
 
 /* =============================
    ADD COMMAND
-============================= */
+ ============================= */
 program
   .command("add <component>")
   .description("Add a component to your project")
@@ -87,25 +110,45 @@ program
       }
 
       const config = await fs.readJSON(configPath);
-      const registryPath = path.join(packageRoot, "registry.json");
-
-      if (!await fs.pathExists(registryPath)) {
-        console.error("Error: Registry configuration not found in the package.");
-        process.exit(1);
-      }
-
-      const registry = await fs.readJSON(registryPath);
+      const registry = await loadRegistry();
       const isTsProject = await fs.pathExists(path.join(cwd, "tsconfig.json"));
 
       // Determine which components to install
       let selectedComponents = [];
 
-      // Check if it's a category
-      const categoryComponents = Object.keys(registry).filter(
-        (key) => registry[key].category === component
-      );
+      // Determine if the input refers to a category that supports category-wide operations
+      const categorySupportMap = {};
+      for (const [key, compData] of Object.entries(registry)) {
+        if (compData.category && compData.supportsCategory) {
+          categorySupportMap[compData.category.toLowerCase()] = compData.category;
+        }
+      }
 
-      if (categoryComponents.length > 0) {
+      const getCategoryFromInput = (input, supportMap) => {
+        const normInput = input.toLowerCase().trim().replace(/s$/, "");
+        for (const [normCat, originalCat] of Object.entries(supportMap)) {
+          const normCatSingular = normCat.replace(/s$/, "");
+          if (normInput === normCatSingular || (normInput === "dropdown" && normCatSingular === "select-dropdown")) {
+            return originalCat;
+          }
+        }
+        return null;
+      };
+
+      const targetCategory = getCategoryFromInput(component, categorySupportMap);
+      const isExactComponent = !!registry[component];
+
+      if (targetCategory && (!isExactComponent || options.all || options.select)) {
+        // Treat as category installation
+        const categoryComponents = Object.keys(registry).filter(
+          (key) => registry[key].category === targetCategory
+        );
+
+        if (categoryComponents.length === 0) {
+          console.error(`Error: Category '${component}' has no components in the registry.`);
+          process.exit(1);
+        }
+
         if (options.all) {
           selectedComponents = categoryComponents;
         } else {
@@ -114,7 +157,7 @@ program
             {
               type: "checkbox",
               name: "components",
-              message: `Select components from category "${component}" to add:`,
+              message: `Select components from category "${targetCategory}" to add:`,
               choices: categoryComponents.map((key) => ({
                 name: `${registry[key].name} (${key})`,
                 value: key,
@@ -128,8 +171,8 @@ program
           }
         }
       } else {
-        // Not a category, treat as a single component key
-        if (!registry[component]) {
+        // Not a category (or exact component targeted without category flags), treat as a single component key
+        if (!isExactComponent) {
           console.error(`Error: Component or Category '${component}' not found in registry.`);
           console.log(`Available categories/components: ${Array.from(new Set(Object.values(registry).map(c => c.category).filter(Boolean))).join(", ")} or ${Object.keys(registry).join(", ")}`);
           process.exit(1);
@@ -419,14 +462,7 @@ program
       }
 
       const config = await fs.readJSON(configPath);
-      const registryPath = path.join(packageRoot, "registry.json");
-
-      if (!await fs.pathExists(registryPath)) {
-        console.error("Error: Registry configuration not found.");
-        process.exit(1);
-      }
-
-      const registry = await fs.readJSON(registryPath);
+      const registry = await loadRegistry();
       const componentData = registry[component];
 
       if (!componentData) {
@@ -636,13 +672,7 @@ program
         }
       }
 
-      const registryPath = path.join(packageRoot, "registry.json");
-      if (!await fs.pathExists(registryPath)) {
-        console.error("Error: Registry configuration not found.");
-        process.exit(1);
-      }
-
-      const registry = await fs.readJSON(registryPath);
+      const registry = await loadRegistry();
 
       // Terminal styling colors
       const GREEN = "\x1b[32m";

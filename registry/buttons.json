@@ -1,0 +1,9 @@
+{
+  "button": {
+    "name": "Button",
+    "category": "button",
+    "files": ["templates/button/Button.tsx", "templates/button/tooltip.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge"]
+  }
+}

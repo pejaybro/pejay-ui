@@ -1,0 +1,28 @@
+{
+  "dropdown/select-input": {
+    "name": "SelectInput",
+    "category": "select-dropdown",
+    "files": ["templates/select-dropdown/select-input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "@floating-ui/react"
+    ],
+    "supportsCategory": true
+  },
+  "dropdown/multiselect-input": {
+    "name": "MultiselectInput",
+    "category": "select-dropdown",
+    "files": ["templates/select-dropdown/multiselect-input.tsx"],
+    "utils": ["cn.ts"],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "@floating-ui/react"
+    ],
+    "supportsCategory": true
+  }
+}

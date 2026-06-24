@@ -1,0 +1,83 @@
+{
+  "tanstack-query-client": {
+    "name": "TanstackQueryClient",
+    "category": "scaffold",
+    "subcategory": "tanstack-query",
+    "targetDirName": "tanstack-query",
+    "files": [
+      "templates/scaffolds/tanstack-query"
+    ],
+    "peerDependencies": [
+      "@tanstack/react-query"
+    ],
+    "supportsCategory": true
+  },
+  "react-router-client": {
+    "name": "ReactRouterClient",
+    "category": "scaffold",
+    "subcategory": "react-router",
+    "targetDirName": "react-router",
+    "files": [
+      "templates/scaffolds/react-router"
+    ],
+    "peerDependencies": [
+      "react-router-dom"
+    ],
+    "supportsCategory": true
+  },
+  "tanstack-router-client": {
+    "name": "TanstackRouterClient",
+    "category": "scaffold",
+    "subcategory": "tanstack-router",
+    "targetDirName": "tanstack-router",
+    "files": [
+      "templates/scaffolds/tanstack-router"
+    ],
+    "peerDependencies": [
+      "@tanstack/react-router"
+    ],
+    "supportsCategory": true
+  },
+  "axios-client": {
+    "name": "AxiosClient",
+    "category": "scaffold",
+    "subcategory": "axios",
+    "targetDirName": "axios",
+    "files": [
+      "templates/scaffolds/axios"
+    ],
+    "peerDependencies": [
+      "axios"
+    ],
+    "supportsCategory": true
+  },
+  "redux-store-client": {
+    "name": "ReduxStoreClient",
+    "category": "scaffold",
+    "subcategory": "redux-store",
+    "targetDirName": "redux-store",
+    "files": [
+      "templates/scaffolds/redux-store"
+    ],
+    "peerDependencies": [
+      "@reduxjs/toolkit",
+      "react-redux",
+      "redux-persist"
+    ],
+    "supportsCategory": true
+  },
+  "rtk-query-client": {
+    "name": "RtkQueryClient",
+    "category": "scaffold",
+    "subcategory": "rtk-query",
+    "targetDirName": "rtk-query",
+    "files": [
+      "templates/scaffolds/rtk-query"
+    ],
+    "peerDependencies": [
+      "@reduxjs/toolkit",
+      "react-redux"
+    ],
+    "supportsCategory": true
+  }
+}

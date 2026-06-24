@@ -43,6 +43,9 @@ This allows you to easily import multiple components:
 import { Input, Checkbox, AmountInput } from "@/pejay-ui/components";
 ```
 
+**Component-Specific Documentation (READMEs):**
+Certain components (like `toast`) ship with localized `README.md` guides. When you install them, the CLI automatically copies their detailed usage documentation directly into the component's folder (e.g., `src/pejay-ui/components/toast/README.md`) so you have helper docs right next to the code.
+
 ### 3. Remove Component
 ```bash
 npx pejay-ui remove <component-name>
@@ -84,6 +87,7 @@ npx pejay-ui add form/switch
 npx pejay-ui add form/textarea
 npx pejay-ui add form/url-input
 ```
+*(Supports category-wide commands: `npx pejay-ui add form --all` or `npx pejay-ui add form --select`)*
 
 ### Date & Time Pickers
 ```bash
@@ -92,17 +96,32 @@ npx pejay-ui add form/date-range-picker
 npx pejay-ui add form/time-picker
 npx pejay-ui add form/time-range-picker
 ```
+*(Supports category-wide commands: `npx pejay-ui add form --all` or `npx pejay-ui add form --select`)*
 
 ### Dropdowns & Selects
 ```bash
 npx pejay-ui add dropdown/select-input
 npx pejay-ui add dropdown/multiselect-input
 ```
+*(Supports category-wide commands: `npx pejay-ui add dropdown --all` or `npx pejay-ui add dropdown --select`)*
 
 ### Layouts
 ```bash
 npx pejay-ui add layouts/lv1
 ```
+*(Supports category-wide commands: `npx pejay-ui add layouts --all` or `npx pejay-ui add layouts --select`)*
+
+### Toast
+```bash
+npx pejay-ui add toast
+```
+*(Includes a localized `README.md` guide copied directly into your components folder).*
+
+### Overlays
+```bash
+npx pejay-ui add overlays/portal
+```
+*(Supports category-wide commands: `npx pejay-ui add overlays --all` or `npx pejay-ui add overlays --select`)*
 
 ### Scaffolds & Templates
 ```bash
@@ -113,3 +132,4 @@ npx pejay-ui add axios-client
 npx pejay-ui add redux-store-client
 npx pejay-ui add rtk-query-client
 ```
+*(Supports category-wide commands: `npx pejay-ui add scaffold --all` or `npx pejay-ui add scaffold --select`)*
