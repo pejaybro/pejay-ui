@@ -1,8 +1,8 @@
 {
   "name": "pejay-ui",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "type": "module",
-  "description": "react ui components",
+  "description": "A powerful React UI component CLI tool to initialize, add, and scaffold premium Tailwind CSS components, layouts, overlays, and client templates.",
   "bin": {
     "pejay-ui": "bin/cli.js"
   },
@@ -13,10 +13,32 @@
     "registry/"
   ],
   "keywords": [
+    "pejay-ui",
+    "pejay",
     "react",
-    "components",
-    "ui",
-    "cli"
+    "react-components",
+    "ui-library",
+    "ui-components",
+    "cli",
+    "component-cli",
+    "tailwind",
+    "tailwindcss",
+    "shadcn",
+    "toast",
+    "react-toast",
+    "portal",
+    "overlays",
+    "dropdown",
+    "date-picker",
+    "time-picker",
+    "layouts",
+    "scaffold",
+    "boilerplate",
+    "tanstack-query",
+    "react-router",
+    "redux-toolkit",
+    "rtk-query",
+    "axios"
   ],
   "license": "MIT",
   "dependencies": {
