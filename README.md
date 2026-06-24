@@ -46,6 +46,14 @@ import { Input, Checkbox, AmountInput } from "@/pejay-ui/components";
 **Component-Specific Documentation (READMEs):**
 Certain components (like `toast`) ship with localized `README.md` guides. When you install them, the CLI automatically copies their detailed usage documentation directly into the component's folder (e.g., `src/pejay-ui/components/toast/README.md`) so you have helper docs right next to the code.
 
+**Overwrite Protection:**
+To prevent accidentally overwriting any custom modifications you have made to your components, the CLI checks if the component is already tracked in `pejay-ui.json` or if its files already exist in your workspace. It will ask for confirmation before overwriting:
+```
+? Component '<name>' is already present in your project. Overwriting it will discard any local changes you have made. Do you want to proceed and overwrite it? (y/N)
+```
+- Choosing **No** safely skips the installation, preserving your local changes.
+- Choosing **Yes** overwrites the files with a fresh copy of the component template.
+
 ### 3. Remove Component
 ```bash
 npx pejay-ui remove <component-name>

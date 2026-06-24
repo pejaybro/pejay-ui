@@ -218,6 +218,67 @@ program
         }
 
         const componentData = registry[compToInstall];
+
+        // Check if the component is already installed or if any target files already exist
+        const outputExt = isTsProject ? "tsx" : "jsx";
+        let isAlreadyPresent = !!config.installed?.[compToInstall];
+
+        if (!isAlreadyPresent) {
+          let targetDir;
+          if (componentData.category === "scaffold") {
+            targetDir = path.join(cwd, "src", componentData.targetDirName || compToInstall);
+          } else {
+            targetDir = path.join(cwd, config.baseDir, "components", componentData.category);
+          }
+
+          const sourceFiles = componentData.files || (componentData.path ? [componentData.path] : []);
+          for (const srcFilePath of sourceFiles) {
+            const templateSrc = path.join(packageRoot, srcFilePath);
+            if (await fs.pathExists(templateSrc)) {
+              const isDir = (await fs.stat(templateSrc)).isDirectory();
+              if (isDir) {
+                const allFiles = await getFilesRecursively(templateSrc);
+                for (const file of allFiles) {
+                  const relativePath = path.relative(templateSrc, file);
+                  const filename = relativePath.replace(/\.(tsx|ts)$/, (match) => {
+                    return match === ".tsx" ? `.${outputExt}` : `.${isTsProject ? "ts" : "js"}`;
+                  });
+                  const targetFile = path.join(targetDir, filename);
+                  if (await fs.pathExists(targetFile)) {
+                    isAlreadyPresent = true;
+                    break;
+                  }
+                }
+              } else {
+                const filename = path.basename(srcFilePath).replace(/\.(tsx|ts)$/, (match) => {
+                  return match === ".tsx" ? `.${outputExt}` : `.${isTsProject ? "ts" : "js"}`;
+                });
+                const targetFile = path.join(targetDir, filename);
+                if (await fs.pathExists(targetFile)) {
+                  isAlreadyPresent = true;
+                }
+              }
+            }
+            if (isAlreadyPresent) break;
+          }
+        }
+
+        if (isAlreadyPresent) {
+          const { overwrite } = await prompt([
+            {
+              type: "confirm",
+              name: "overwrite",
+              message: `Component '${compToInstall}' is already present in your project. Overwriting it will discard any local changes you have made. Do you want to proceed and overwrite it?`,
+              default: false,
+            },
+          ]);
+
+          if (!overwrite) {
+            console.log(`Skipping component: ${componentData.name}.\n`);
+            continue;
+          }
+        }
+
         console.log(`Installing component: ${componentData.name}...`);
 
         // 1. Check target project package.json for peerDependencies
@@ -300,7 +361,6 @@ program
         } else {
           targetDir = path.join(cwd, config.baseDir, "components", componentData.category);
         }
-        const outputExt = isTsProject ? "tsx" : "jsx";
 
         // Determine list of files to copy
         const sourceFiles = componentData.files || (componentData.path ? [componentData.path] : []);
