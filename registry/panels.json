@@ -1,0 +1,19 @@
+{
+  "panels": {
+    "name": "Panels",
+    "category": "panels",
+    "outputDirectory": "panels",
+    "files": ["templates/panels"],
+    "utils": ["cn.ts"],
+    "dependencies": [
+      "overlays/portal",
+      "toast"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "motion"
+    ]
+  }
+}

@@ -38,6 +38,24 @@ const getFilesRecursively = async (dir) => {
   return results;
 };
 
+/*
+ * resolveTargetDir – single source of truth for where a component's files land.
+ *
+ * Priority:
+ *   1. category === "scaffold"  →  src/<targetDirName|key>/
+ *   2. outputDirectory present  →  <baseDir>/<outputDirectory>/
+ *   3. default                  →  <baseDir>/components/<category>/
+ */
+const resolveTargetDir = (cwd, baseDir, compKey, compData) => {
+  if (compData.category === "scaffold") {
+    return path.join(cwd, "src", compData.targetDirName || compKey);
+  }
+  if (compData.outputDirectory) {
+    return path.join(cwd, baseDir, compData.outputDirectory);
+  }
+  return path.join(cwd, baseDir, "components", compData.category);
+};
+
 const loadRegistry = async () => {
   const registryDir = path.join(packageRoot, "registry");
   if (!await fs.pathExists(registryDir)) {
@@ -224,12 +242,7 @@ program
         let isAlreadyPresent = !!config.installed?.[compToInstall];
 
         if (!isAlreadyPresent) {
-          let targetDir;
-          if (componentData.category === "scaffold") {
-            targetDir = path.join(cwd, "src", componentData.targetDirName || compToInstall);
-          } else {
-            targetDir = path.join(cwd, config.baseDir, "components", componentData.category);
-          }
+          let targetDir = resolveTargetDir(cwd, config.baseDir, compToInstall, componentData);
 
           const sourceFiles = componentData.files || (componentData.path ? [componentData.path] : []);
           for (const srcFilePath of sourceFiles) {
@@ -355,12 +368,7 @@ program
         }
 
         // 3. Process & Copy Component Files
-        let targetDir;
-        if (componentData.category === "scaffold") {
-          targetDir = path.join(cwd, "src", componentData.targetDirName || compToInstall);
-        } else {
-          targetDir = path.join(cwd, config.baseDir, "components", componentData.category);
-        }
+        let targetDir = resolveTargetDir(cwd, config.baseDir, compToInstall, componentData);
 
         // Determine list of files to copy
         const sourceFiles = componentData.files || (componentData.path ? [componentData.path] : []);
@@ -550,7 +558,7 @@ program
       // 1.5 Update index files
       if (componentData.category && !["scaffold", "scaffolds", "script", "scripts"].includes(componentData.category.toLowerCase())) {
         const isTsProject = await fs.pathExists(path.join(cwd, "tsconfig.json"));
-        const targetDir = path.join(cwd, config.baseDir, "components", componentData.category);
+        const targetDir = resolveTargetDir(cwd, config.baseDir, component, componentData);
         const indexExt = isTsProject ? "ts" : "js";
         
         if (await fs.pathExists(targetDir)) {
