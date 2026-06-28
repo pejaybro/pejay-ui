@@ -1,1 +1,2 @@
-export * from "./portal";
+export * from "./portal/portal";
+export * from "./tooltip/tooltip";

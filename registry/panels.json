@@ -3,11 +3,13 @@
     "name": "Panels",
     "category": "panels",
     "outputDirectory": "panels",
+    "skipIndex": true,
     "files": ["templates/panels"],
     "utils": ["cn.ts"],
     "dependencies": [
       "overlays/portal",
-      "toast"
+      "toast",
+      "hotkeys"
     ],
     "peerDependencies": [
       "clsx",

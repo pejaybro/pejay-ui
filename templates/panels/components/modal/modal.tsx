@@ -4,7 +4,7 @@ import {
   registerActiveOverlayClose,
   unregisterActiveOverlayClose,
 } from "../../core/form-overlay-registry";
-import { Portal } from "../portal";
+import { Portal } from "@/pejay-ui/components/overlays";
 import { Backdrop } from "./backdrop";
 import { getOverlayContentZ } from "../../core/constants";
 

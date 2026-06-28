@@ -399,6 +399,17 @@ program
                 ? `${relativeToUtils}/cn` 
                 : `${relativeToUtils}/cn.js`;
               componentCode = componentCode.replace(/@\/utils\/cn/g, cnImportPath);
+              componentCode = componentCode.replace(/@\/utils/g, cnImportPath);
+
+              const relativeToBaseDir = path.relative(fileDir, path.join(cwd, config.baseDir)).replace(/\\/g, "/");
+              let pejayUiImportPath = relativeToBaseDir;
+              if (!pejayUiImportPath.startsWith(".")) {
+                pejayUiImportPath = `./${pejayUiImportPath}`;
+              }
+              if (pejayUiImportPath.endsWith("/")) {
+                pejayUiImportPath = pejayUiImportPath.slice(0, -1);
+              }
+              componentCode = componentCode.replace(/@\/pejay-ui/g, pejayUiImportPath);
 
               if (!isTsProject) {
                 const transformed = babel.transformSync(componentCode, {
@@ -429,6 +440,17 @@ program
               ? `${relativeToUtils}/cn` 
               : `${relativeToUtils}/cn.js`;
             componentCode = componentCode.replace(/@\/utils\/cn/g, cnImportPath);
+            componentCode = componentCode.replace(/@\/utils/g, cnImportPath);
+
+            const relativeToBaseDir = path.relative(fileDir, path.join(cwd, config.baseDir)).replace(/\\/g, "/");
+            let pejayUiImportPath = relativeToBaseDir;
+            if (!pejayUiImportPath.startsWith(".")) {
+              pejayUiImportPath = `./${pejayUiImportPath}`;
+            }
+            if (pejayUiImportPath.endsWith("/")) {
+              pejayUiImportPath = pejayUiImportPath.slice(0, -1);
+            }
+            componentCode = componentCode.replace(/@\/pejay-ui/g, pejayUiImportPath);
 
             if (!isTsProject) {
               const transformed = babel.transformSync(componentCode, {
@@ -448,7 +470,7 @@ program
         }
 
         // 3.5 Automatically generate/update category-level and global index.ts/index.js files
-        if (componentData.category && !["scaffold", "scaffolds", "script", "scripts"].includes(componentData.category.toLowerCase())) {
+        if (componentData.category && !componentData.skipIndex && !["scaffold", "scaffolds", "script", "scripts"].includes(componentData.category.toLowerCase())) {
           const indexExt = isTsProject ? "ts" : "js";
           const filesInDir = await fs.readdir(targetDir);
           const exportableFiles = [];
@@ -556,7 +578,7 @@ program
       }
 
       // 1.5 Update index files
-      if (componentData.category && !["scaffold", "scaffolds", "script", "scripts"].includes(componentData.category.toLowerCase())) {
+      if (componentData.category && !componentData.skipIndex && !["scaffold", "scaffolds", "script", "scripts"].includes(componentData.category.toLowerCase())) {
         const isTsProject = await fs.pathExists(path.join(cwd, "tsconfig.json"));
         const targetDir = resolveTargetDir(cwd, config.baseDir, component, componentData);
         const indexExt = isTsProject ? "ts" : "js";

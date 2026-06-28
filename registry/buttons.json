@@ -2,8 +2,9 @@
   "button": {
     "name": "Button",
     "category": "button",
-    "files": ["templates/button/Button.tsx", "templates/button/tooltip.tsx"],
+    "files": ["templates/button/Button.tsx", "templates/button/README.md"],
     "utils": ["cn.ts"],
-    "peerDependencies": ["clsx", "tailwind-merge"]
+    "peerDependencies": ["clsx", "tailwind-merge"],
+    "dependencies": ["overlays/tooltip", "spinner"]
   }
 }

@@ -1,6 +1,6 @@
 import { useState, useLayoutEffect, useEffect } from "react";
 import { Menu, PanelLeftOpen, PanelRightOpen, X } from "lucide-react";
-import { cn } from "@/utils/cn";
+import { cn } from "@/pejay-ui/utils/cn";
 import { MenuSection, SidebarMenu } from "./sidebar-menu";
 
 

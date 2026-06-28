@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@/utils";
+import { cn } from "@/pejay-ui/utils/cn";
 
 interface BaseCardProps {
   children?: ReactNode;

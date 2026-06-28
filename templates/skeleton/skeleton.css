@@ -1,0 +1,36 @@
+/* ─────────────────────────────────────────────────────────────
+   SKELETON SHIMMER KEYFRAMES
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.05) 25%,
+    rgba(0, 0, 0, 0.10) 37%,
+    rgba(0, 0, 0, 0.05) 63%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite linear;
+}
+
+/* Dark mode override */
+.dark .skeleton-shimmer-bg,
+@media (prefers-color-scheme: dark) {
+  .skeleton-shimmer-bg {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.10) 37%,
+      rgba(255, 255, 255, 0.05) 63%
+    );
+  }
+}

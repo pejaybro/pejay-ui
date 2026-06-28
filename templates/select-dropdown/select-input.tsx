@@ -9,8 +9,8 @@ import {
   FloatingPortal,
 } from "@floating-ui/react";
 import { ChevronDown, Check, Search, X, Loader2 } from "lucide-react";
-import { cn } from "@/utils/cn";
-import { Tooltip } from "../button/tooltip";
+import { cn } from "@/pejay-ui/utils/cn";
+import { Tooltip } from "@/pejay-ui/components/overlays";
 
 export interface SelectOption {
   id: string;

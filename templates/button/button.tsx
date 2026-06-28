@@ -1,7 +1,8 @@
 import React from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "@/pejay-ui/utils/cn";
 
-import { Tooltip } from "./tooltip";
+import { Spinner } from "@/pejay-ui/spinner";
+import { Tooltip } from "@/pejay-ui/components/overlays";
 
 /* ─────────────────────────────────────────────
    Types
@@ -28,7 +29,8 @@ export type ButtonVariant =
   | "success-ghost"
   | "warning-ghost"
   | "black-ghost"
-  | "white-ghost";
+  | "white-ghost"
+  | "soft";
 export type RoundedStyle = "full" | "lg" | "md" | "sm" | "none";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -67,6 +69,7 @@ const variantMap: Record<ButtonVariant, string> = {
   warning: "bg-amber-500   hover:bg-amber-600   active:bg-amber-700   text-white",
   black:   "bg-black       hover:bg-black/80    active:bg-black/70    text-white",
   white:   "bg-white       hover:bg-white/80    active:bg-white/70    text-black",
+  soft:    "bg-sky-500/10  hover:bg-sky-500/20  active:bg-sky-500/30  text-sky-500",
 
   /* ── Soft (coloured text, always-visible tint) ───────── */
   "primary-soft": "text-sky-500     bg-current/10 hover:bg-current/15 active:bg-current/20",
@@ -119,10 +122,8 @@ export const Button = ({
     ? stripInteractive(variantMap[variant])
     : variantMap[variant];
 
-  /* Render content: loader node / fallback text / normal children */
-  const content = isLoading
-    ? (loader ?? <span className="text-sm font-medium">Loading…</span>)
-    : children;
+  /* Render content: loader node / spinner / normal children */
+  const content = isLoading ? (loader ?? <Spinner size="sm" />) : children;
 
   return (
     <Tooltip content={tooltipContent}>

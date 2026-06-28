@@ -4,9 +4,16 @@
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/pejay-ui/components/*": ["./templates/*"],
+      "@/pejay-ui/utils/*": ["./utils/*"],
+      "@/pejay-ui/panels": ["./templates/panels"],
+      "@/pejay-ui/panels/*": ["./templates/panels/*"],
+      "@/pejay-ui/hotkeys": ["./templates/hotkeys"],
+      "@/pejay-ui/hotkeys/*": ["./templates/hotkeys/*"],
+      "@/pejay-ui/spinner": ["./templates/spinner"],
+      "@/pejay-ui/spinner/*": ["./templates/spinner/*"]
     },
     "jsx": "react-jsx",
     "strict": true,
@@ -14,5 +21,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["templates/**/*", "utils/**/*"]
+  "include": ["templates/**/*", "utils/**/*"],
+  "exclude": [
+    "templates/scaffolds/**/*",
+    "templates/utilities/**/*",
+    "templates/notes/**/*"
+  ]
 }

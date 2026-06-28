@@ -1,0 +1,13 @@
+{
+  "spinner": {
+    "name": "Spinner",
+    "category": "spinner",
+    "outputDirectory": "spinner",
+    "skipIndex": true,
+    "files": [
+      "templates/spinner/spinner.tsx",
+      "templates/spinner/spinner.css",
+      "templates/spinner/README.md"
+    ]
+  }
+}

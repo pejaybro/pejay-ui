@@ -2,7 +2,7 @@
   "dropdown/select-input": {
     "name": "SelectInput",
     "category": "select-dropdown",
-    "files": ["templates/select-dropdown/select-input.tsx"],
+    "files": ["templates/select-dropdown/select-input.tsx", "templates/select-dropdown/README.md"],
     "utils": ["cn.ts"],
     "peerDependencies": [
       "clsx",
@@ -10,6 +10,7 @@
       "lucide-react",
       "@floating-ui/react"
     ],
+    "dependencies": ["overlays/tooltip"],
     "supportsCategory": true
   },
   "dropdown/multiselect-input": {
@@ -23,6 +24,7 @@
       "lucide-react",
       "@floating-ui/react"
     ],
+    "dependencies": ["overlays/tooltip"],
     "supportsCategory": true
   }
 }

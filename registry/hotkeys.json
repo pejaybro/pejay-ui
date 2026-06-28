@@ -1,0 +1,12 @@
+{
+  "hotkeys": {
+    "name": "Hotkeys",
+    "category": "hotkeys",
+    "outputDirectory": "hotkeys",
+    "skipIndex": true,
+    "files": ["templates/hotkeys"],
+    "peerDependencies": [
+      "lucide-react"
+    ]
+  }
+}

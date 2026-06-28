@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Portal } from "../portal";
+import { Portal } from "@/pejay-ui/components/overlays";
 import type { OverlayContent, OverlayOptions } from "../../core/types";
 import {
   getOverlayBackdropZ,

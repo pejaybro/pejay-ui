@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
-import { cn } from "@/utils";
+import { cn } from "@/pejay-ui/utils/cn";
 import type { FormTabsConfig } from "../../core/types";
 import { requestOverlayCloseWithConfirm } from "../../core/overlay-close";
 import { useFormOverlayRegistration } from "../../hooks/useFormOverlayRegistration";

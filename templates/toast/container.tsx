@@ -8,8 +8,8 @@ import {
   Info,
   X,
 } from "lucide-react";
-import { cn } from "@/utils/cn";
-import { Portal } from "../overlays";
+import { cn } from "@/pejay-ui/utils/cn";
+import { Portal } from "@/pejay-ui/components/overlays";
 
 // Dictionary mapping toast types to their respective Lucide icons and Tailwind styles
 const TOAST_STYLES = {

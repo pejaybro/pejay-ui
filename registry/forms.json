@@ -3,7 +3,8 @@
     "name": "Input",
     "category": "form",
     "files": [
-      "templates/form/input.tsx"
+      "templates/form/text-inputs/input.tsx",
+      "templates/form/text-inputs/readme.input.md"
     ],
     "utils": [
       "cn.ts"
@@ -19,7 +20,8 @@
     "name": "AmountInput",
     "category": "form",
     "files": [
-      "templates/form/amount-input.tsx"
+      "templates/form/numeric/amount-input.tsx",
+      "templates/form/numeric/readme.amount-input.md"
     ],
     "utils": [
       "cn.ts"
@@ -29,13 +31,17 @@
       "tailwind-merge",
       "lucide-react"
     ],
-    "supportsCategory": true
+    "supportsCategory": true,
+    "dependencies": [
+      "form/input"
+    ]
   },
   "form/checkbox": {
     "name": "Checkbox",
     "category": "form",
     "files": [
-      "templates/form/checkbox.tsx"
+      "templates/form/choices/checkbox.tsx",
+      "templates/form/choices/readme.checkbox.md"
     ],
     "utils": [
       "cn.ts"
@@ -51,7 +57,8 @@
     "name": "CheckboxGroup",
     "category": "form",
     "files": [
-      "templates/form/checkbox-group.tsx"
+      "templates/form/choices/checkbox-group.tsx",
+      "templates/form/choices/readme.checkbox-group.md"
     ],
     "utils": [
       "cn.ts"
@@ -69,7 +76,8 @@
     "name": "DatePicker",
     "category": "form",
     "files": [
-      "templates/form/date-picker.tsx"
+      "templates/form/pickers/date-picker.tsx",
+      "templates/form/pickers/readme.date-picker.md"
     ],
     "utils": [
       "cn.ts"
@@ -89,7 +97,8 @@
     "name": "DateRangePicker",
     "category": "form",
     "files": [
-      "templates/form/date-range-picker.tsx"
+      "templates/form/pickers/date-range-picker.tsx",
+      "templates/form/pickers/readme.date-range-picker.md"
     ],
     "utils": [
       "cn.ts"
@@ -109,7 +118,8 @@
     "name": "EmailInput",
     "category": "form",
     "files": [
-      "templates/form/email-input.tsx"
+      "templates/form/text-inputs/email-input.tsx",
+      "templates/form/text-inputs/readme.email-input.md"
     ],
     "utils": [
       "cn.ts"
@@ -125,7 +135,8 @@
     "name": "FileInput",
     "category": "form",
     "files": [
-      "templates/form/file-input.tsx"
+      "templates/form/file/file-input.tsx",
+      "templates/form/file/readme.file-input.md"
     ],
     "utils": [
       "cn.ts"
@@ -135,13 +146,17 @@
       "tailwind-merge",
       "lucide-react"
     ],
-    "supportsCategory": true
+    "supportsCategory": true,
+    "dependencies": [
+      "form/input"
+    ]
   },
   "form/number-input": {
     "name": "NumberInput",
     "category": "form",
     "files": [
-      "templates/form/number-input.tsx"
+      "templates/form/numeric/number-input.tsx",
+      "templates/form/numeric/readme.number-input.md"
     ],
     "utils": [
       "cn.ts"
@@ -151,13 +166,17 @@
       "tailwind-merge",
       "lucide-react"
     ],
-    "supportsCategory": true
+    "supportsCategory": true,
+    "dependencies": [
+      "form/input"
+    ]
   },
   "form/password-input": {
     "name": "PasswordInput",
     "category": "form",
     "files": [
-      "templates/form/password-input.tsx"
+      "templates/form/text-inputs/password-input.tsx",
+      "templates/form/text-inputs/readme.password-input.md"
     ],
     "utils": [
       "cn.ts"
@@ -173,7 +192,8 @@
     "name": "PhoneInput",
     "category": "form",
     "files": [
-      "templates/form/phone-input.tsx"
+      "templates/form/text-inputs/phone-input.tsx",
+      "templates/form/text-inputs/readme.phone-input.md"
     ],
     "utils": [
       "cn.ts"
@@ -189,7 +209,8 @@
     "name": "Radio",
     "category": "form",
     "files": [
-      "templates/form/radio.tsx"
+      "templates/form/choices/radio.tsx",
+      "templates/form/choices/readme.radio.md"
     ],
     "utils": [
       "cn.ts"
@@ -204,7 +225,8 @@
     "name": "RadioGroup",
     "category": "form",
     "files": [
-      "templates/form/radio-group.tsx"
+      "templates/form/choices/radio-group.tsx",
+      "templates/form/choices/readme.radio-group.md"
     ],
     "utils": [
       "cn.ts"
@@ -222,7 +244,8 @@
     "name": "RangeSlider",
     "category": "form",
     "files": [
-      "templates/form/range-slider.tsx"
+      "templates/form/numeric/range-slider.tsx",
+      "templates/form/numeric/readme.range-slider.md"
     ],
     "utils": [
       "cn.ts"
@@ -237,7 +260,8 @@
     "name": "Switch",
     "category": "form",
     "files": [
-      "templates/form/switch.tsx"
+      "templates/form/choices/switch.tsx",
+      "templates/form/choices/readme.switch.md"
     ],
     "utils": [
       "cn.ts"
@@ -252,7 +276,8 @@
     "name": "Textarea",
     "category": "form",
     "files": [
-      "templates/form/textarea.tsx"
+      "templates/form/text-inputs/textarea.tsx",
+      "templates/form/text-inputs/readme.textarea.md"
     ],
     "utils": [
       "cn.ts"
@@ -267,7 +292,8 @@
     "name": "TimePicker",
     "category": "form",
     "files": [
-      "templates/form/time-picker.tsx"
+      "templates/form/pickers/time-picker.tsx",
+      "templates/form/pickers/readme.time-picker.md"
     ],
     "utils": [
       "cn.ts"
@@ -287,7 +313,8 @@
     "name": "TimeRangePicker",
     "category": "form",
     "files": [
-      "templates/form/time-range-picker.tsx"
+      "templates/form/pickers/time-range-picker.tsx",
+      "templates/form/pickers/readme.time-range-picker.md"
     ],
     "utils": [
       "cn.ts"
@@ -307,7 +334,8 @@
     "name": "UrlInput",
     "category": "form",
     "files": [
-      "templates/form/url-input.tsx"
+      "templates/form/text-inputs/url-input.tsx",
+      "templates/form/text-inputs/readme.url-input.md"
     ],
     "utils": [
       "cn.ts"

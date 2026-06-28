@@ -20,3 +20,4 @@ tsconfig.json
 others/
 demo/
 *.ps1
+.agents*

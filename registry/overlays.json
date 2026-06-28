@@ -2,7 +2,23 @@
   "overlays/portal": {
     "name": "Portal",
     "category": "overlays",
-    "files": ["templates/overlays/portal.tsx"],
+    "files": [
+      "templates/overlays/portal/portal.tsx"
+    ],
     "supportsCategory": true
+  },
+  "overlays/tooltip": {
+    "name": "Tooltip",
+    "category": "overlays",
+    "files": [
+      "templates/overlays/tooltip/tooltip.tsx",
+      "templates/overlays/tooltip/readme.tooltip.md"
+    ],
+    "supportsCategory": true,
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "@floating-ui/react"
+    ]
   }
 }

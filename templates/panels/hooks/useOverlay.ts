@@ -1,12 +1,16 @@
 import { useCallback } from "react";
-import { useAppOverlayActions, useAppOverlayState } from "../core/app-context";
+import {
+  usePanelOverlayActions,
+  usePanelOverlayState,
+} from "../core/panel-context";
 import { APP_PROVIDER_TYPE } from "../core/constants";
 import type { OverlayContent, OverlayOptions } from "../core/types";
 
 export function useOverlay() {
-  const { open } = useAppOverlayActions();
-  const { isOverlayOpen, stackDepth } = useAppOverlayState();
+  const { open } = usePanelOverlayActions();
+  const { isOverlayOpen, stackDepth } = usePanelOverlayState();
 
+  /** Open a form side panel (with title, X, footer, keyboard shortcuts). */
   const openSidePanel = useCallback(
     (content: OverlayContent, options?: OverlayOptions) => {
       open(APP_PROVIDER_TYPE.SIDE_PANEL, content, {
@@ -17,6 +21,7 @@ export function useOverlay() {
     [open],
   );
 
+  /** Open a form modal (with title, X, footer, keyboard shortcuts). */
   const openModal = useCallback(
     (content: OverlayContent, options?: OverlayOptions) => {
       open(APP_PROVIDER_TYPE.MODAL, content, options);
@@ -24,16 +29,37 @@ export function useOverlay() {
     [open],
   );
 
-  return { openSidePanel, openModal, isOverlayOpen, stackDepth };
-}
+  /**
+   * Open a raw side panel with no chrome (no title, X button, or footer).
+   * Your content receives `{ close }` and is responsible for its own close trigger.
+   */
+  const openRawSidePanel = useCallback(
+    (content: OverlayContent, options?: OverlayOptions) => {
+      open(APP_PROVIDER_TYPE.SIDE_PANEL_RAW, content, {
+        onSide: "right",
+        ...options,
+      });
+    },
+    [open],
+  );
 
-/** @deprecated Prefer `useOverlay` */
-export function useSidePanel() {
-  return useOverlay();
-}
+  /**
+   * Open a raw modal with no chrome (no title, X button, or footer).
+   * Your content receives `{ close }` and is responsible for its own close trigger.
+   */
+  const openRawModal = useCallback(
+    (content: OverlayContent, options?: OverlayOptions) => {
+      open(APP_PROVIDER_TYPE.MODAL_RAW, content, options);
+    },
+    [open],
+  );
 
-/** @deprecated Prefer `useOverlay` */
-export function useModal() {
-  const { openModal, isOverlayOpen, stackDepth } = useOverlay();
-  return { openModal, isOverlayOpen, stackDepth };
+  return {
+    openSidePanel,
+    openModal,
+    openRawSidePanel,
+    openRawModal,
+    isOverlayOpen,
+    stackDepth,
+  };
 }

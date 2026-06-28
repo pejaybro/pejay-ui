@@ -1,0 +1,20 @@
+{
+  "skeleton": {
+    "name": "Skeleton",
+    "category": "skeleton",
+    "files": [
+      "templates/skeleton/skeleton.tsx",
+      "templates/skeleton/types.ts",
+      "templates/skeleton/skeleton.css",
+      "templates/skeleton/README.md"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "supportsCategory": true
+  }
+}
