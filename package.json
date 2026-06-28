@@ -1,6 +1,6 @@
 {
   "name": "pejay-ui",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "type": "module",
   "description": "A powerful React UI component CLI tool to initialize, add, and scaffold premium Tailwind CSS components, layouts, overlays, and client templates.",
   "bin": {

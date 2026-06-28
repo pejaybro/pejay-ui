@@ -129,15 +129,41 @@ npx pejay-ui add toast
 ```bash
 npx pejay-ui add overlays/portal
 ```
+```bash
+npx pejay-ui add overlays/tooltip
+```
 *(Supports category-wide commands: `npx pejay-ui add overlays --all` or `npx pejay-ui add overlays --select`)*
+
+### Spinners
+```bash
+npx pejay-ui add spinner
+```
+*(Includes a localized `README.md` showing all 9 spinner styles).*
+
+### Skeletons
+```bash
+npx pejay-ui add skeleton
+```
+*(Includes a localized `README.md` showing all skeleton presets).*
 
 ### Scaffolds & Templates
 ```bash
 npx pejay-ui add tanstack-query-client
+```
+```bash
 npx pejay-ui add react-router-client
+```
+```bash
 npx pejay-ui add tanstack-router-client
+```
+```bash
 npx pejay-ui add axios-client
+```
+```bash
 npx pejay-ui add redux-store-client
+```
+```bash
 npx pejay-ui add rtk-query-client
 ```
 *(Supports category-wide commands: `npx pejay-ui add scaffold --all` or `npx pejay-ui add scaffold --select`)*
+
