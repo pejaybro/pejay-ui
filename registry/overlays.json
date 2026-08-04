@@ -20,5 +20,19 @@
       "tailwind-merge",
       "@floating-ui/react"
     ]
+  },
+  "overlays/scrollbar": {
+    "name": "Scrollbar",
+    "category": "overlays",
+    "files": [
+      "templates/overlays/scrollbar/custom-scroll-area.tsx",
+      "templates/overlays/scrollbar/global-scroll-provider.tsx",
+      "templates/overlays/scrollbar/readme.scrollbar.md"
+    ],
+    "supportsCategory": true,
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge"
+    ]
   }
 }
