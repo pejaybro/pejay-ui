@@ -2,15 +2,15 @@
  * ============================================================================
  * CUSTOM SCROLL AREA — Reusable React & Tailwind Component
  * ============================================================================
- * 
+ *
  * HOW TO USE THIS COMPONENT IN ANY REACT + TAILWIND PROJECT:
- * 
+ *
  * 1. Copy this file into your project (e.g., `src/pejay-ui/components/custom-scroll-area.tsx`).
  * 2. Add native scrollbar suppression in your CSS (see readme.scrollbar.md).
  * 3. Import and wrap any overflow content:
- * 
+ *
  *    import { CustomScrollArea } from "@/src/pejay-ui/components";
- * 
+ *
  *    function MyPage() {
  *      return (
  *        <CustomScrollArea className="h-96 w-full p-4">
@@ -18,9 +18,9 @@
  *        </CustomScrollArea>
  *      );
  *    }
- * 
+ *
  * 4. Customizing Settings via Props:
- *    <CustomScrollArea 
+ *    <CustomScrollArea
  *      hideDelay={2000}          // Idle time (ms) before fade-out (Default: 1800ms)
  *      thumbWidth="w-2"          // Tailwind width class for thumb (Default: "w-1.5")
  *      thumbColor="bg-purple-500" // Tailwind color class (Default: "bg-chalk-40")
@@ -32,18 +32,18 @@
  */
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { cn } from "@/src/utils";
+import { cn } from "@/pejay-ui/utils/cn";
 
 export interface CustomScrollAreaProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   className?: string;
-  hideDelay?: number;         // Delay (ms) before auto-hiding when idle
-  fadeDurationMs?: number;    // Fade transition duration (ms)
-  thumbWidth?: string;        // Default thumb width Tailwind class
-  thumbHoverWidth?: string;   // Hovered/Dragged thumb width Tailwind class
-  thumbColor?: string;        // Idle thumb color
-  thumbHoverColor?: string;   // Hovered/Dragged thumb color
-  smoothWheel?: boolean;      // Enable smooth momentum wheel scroll
+  hideDelay?: number; // Delay (ms) before auto-hiding when idle
+  fadeDurationMs?: number; // Fade transition duration (ms)
+  thumbWidth?: string; // Default thumb width Tailwind class
+  thumbHoverWidth?: string; // Hovered/Dragged thumb width Tailwind class
+  thumbColor?: string; // Idle thumb color
+  thumbHoverColor?: string; // Hovered/Dragged thumb color
+  smoothWheel?: boolean; // Enable smooth momentum wheel scroll
 }
 
 export const CustomScrollArea = ({
@@ -87,10 +87,14 @@ export const CustomScrollArea = ({
     }
 
     const minThumbHeight = 32;
-    const calculatedHeight = Math.max((clientHeight / scrollHeight) * clientHeight, minThumbHeight);
+    const calculatedHeight = Math.max(
+      (clientHeight / scrollHeight) * clientHeight,
+      minThumbHeight,
+    );
     const maxScrollTop = scrollHeight - clientHeight;
     const maxThumbTop = clientHeight - calculatedHeight;
-    const calculatedTop = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
+    const calculatedTop =
+      maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
 
     setThumbHeight(calculatedHeight);
     setThumbTop(calculatedTop);
@@ -160,7 +164,7 @@ export const CustomScrollArea = ({
 
       targetScrollTop.current = Math.min(
         maxScroll,
-        Math.max(0, targetScrollTop.current + e.deltaY)
+        Math.max(0, targetScrollTop.current + e.deltaY),
       );
 
       triggerVisibility();
@@ -205,7 +209,7 @@ export const CustomScrollArea = ({
       const deltaY = moveEvent.clientY - startY;
       const newScrollTop = Math.min(
         maxScrollTop,
-        Math.max(0, startScrollTop + (deltaY / maxThumbTop) * maxScrollTop)
+        Math.max(0, startScrollTop + (deltaY / maxThumbTop) * maxScrollTop),
       );
 
       // Instant 1:1 direct scroll update
@@ -261,7 +265,7 @@ export const CustomScrollArea = ({
           }}
           style={{ transitionDuration: `${fadeDurationMs}ms` }}
           className={cn(
-            "absolute right-1 top-0 bottom-0 w-3 z-50 pointer-events-auto transition-opacity ease-out flex justify-end",
+            "absolute right-1.5 top-1.5 bottom-1.5 w-3 z-50 pointer-events-auto transition-opacity ease-out flex justify-end",
             isVisible || isThumbHovered || isDragging
               ? "opacity-100"
               : "opacity-0",
@@ -278,7 +282,8 @@ export const CustomScrollArea = ({
               "rounded-full cursor-pointer pointer-events-auto transition-[background-color,width] duration-150",
               thumbWidth,
               thumbColor,
-              (isThumbHovered || isDragging) && `${thumbHoverWidth} ${thumbHoverColor}`,
+              (isThumbHovered || isDragging) &&
+                `${thumbHoverWidth} ${thumbHoverColor}`,
             )}
           />
         </div>

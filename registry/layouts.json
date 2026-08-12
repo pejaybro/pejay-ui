@@ -1,17 +1,81 @@
 {
-  "layouts/lv1": {
+  "layouts/vr-1": {
     "name": "AppLayout",
     "category": "layouts",
     "files": [
-      "templates/layouts/lv1/app-layout.tsx",
-      "templates/layouts/lv1/sidebar-menu.tsx",
-      "templates/layouts/lv1/index.ts"
+      "templates/layouts/vr-1/app-layout.tsx",
+      "templates/layouts/vr-1/index.ts"
     ],
     "utils": ["cn.ts"],
     "peerDependencies": [
       "clsx",
       "tailwind-merge",
-      "lucide-react"
+      "lucide-react",
+      "react-router-dom"
+    ],
+    "supportsCategory": true
+  },
+  "layouts/vr-2": {
+    "name": "AppLayout2",
+    "category": "layouts",
+    "files": [
+      "templates/layouts/vr-2/app-layout-2.tsx",
+      "templates/layouts/vr-2/index.ts"
+    ],
+    "utils": ["cn.ts"],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "react-router-dom"
+    ],
+    "supportsCategory": true
+  },
+  "layouts/vr-3": {
+    "name": "AppLayout3",
+    "category": "layouts",
+    "files": [
+      "templates/layouts/vr-3/app-layout-3.tsx",
+      "templates/layouts/vr-3/index.ts"
+    ],
+    "utils": ["cn.ts"],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "react-router-dom"
+    ],
+    "supportsCategory": true
+  },
+  "layouts/vr-4": {
+    "name": "AppLayout4",
+    "category": "layouts",
+    "files": [
+      "templates/layouts/vr-4/app-layout-4.tsx",
+      "templates/layouts/vr-4/index.ts"
+    ],
+    "utils": ["cn.ts"],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "react-router-dom"
+    ],
+    "supportsCategory": true
+  },
+  "layouts/vr-5": {
+    "name": "AppLayout5",
+    "category": "layouts",
+    "files": [
+      "templates/layouts/vr-5/app-layout-5.tsx",
+      "templates/layouts/vr-5/index.ts"
+    ],
+    "utils": ["cn.ts"],
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "lucide-react",
+      "react-router-dom"
     ],
     "supportsCategory": true
   }

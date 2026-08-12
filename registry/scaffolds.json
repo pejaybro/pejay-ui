@@ -79,5 +79,19 @@
       "react-redux"
     ],
     "supportsCategory": true
+  },
+  "zustand-client": {
+    "name": "ZustandClient",
+    "category": "scaffold",
+    "subcategory": "zustand",
+    "targetDirName": "zustand",
+    "files": [
+      "templates/scaffolds/zustand"
+    ],
+    "peerDependencies": [
+      "zustand"
+    ],
+    "supportsCategory": true,
+    "readme": "templates/scaffolds/zustand/README.md"
   }
 }

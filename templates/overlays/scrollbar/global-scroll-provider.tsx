@@ -26,7 +26,7 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { cn } from "@/src/utils";
+import { cn } from "@/pejay-ui/utils/cn";
 
 interface GlobalScrollProviderProps {
   children: React.ReactNode;
@@ -98,11 +98,12 @@ export const GlobalScrollProvider: React.FC<GlobalScrollProviderProps> = ({
     const maxScrollTop = scrollHeight - clientHeight;
     const maxThumbTop = clientHeight - calculatedHeight;
     const thumbTopOffset = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
+    const marginOffset = 6; // 6px margin away from top, bottom, and right edges
 
     setThumbRect({
-      top: containerBounds.top + thumbTopOffset,
+      top: containerBounds.top + marginOffset + thumbTopOffset,
       left: containerBounds.right - 10,
-      height: calculatedHeight,
+     height: Math.max(calculatedHeight - (marginOffset * 2), 24),
       width: isThumbHovered || isDragging ? 8 : 6,
     });
   }, [isThumbHovered, isDragging]);

@@ -8,6 +8,8 @@ import { Tooltip } from "@/pejay-ui/components/overlays";
    Types
    ───────────────────────────────────────────── */
 
+type TooltipProps = React.ComponentProps<typeof Tooltip>;
+
 export type ButtonVariant =
   /* ── Solid (filled bg, white text) ──────── */
   | "primary"
@@ -30,7 +32,12 @@ export type ButtonVariant =
   | "warning-ghost"
   | "black-ghost"
   | "white-ghost"
-  | "soft";
+  | "soft"
+  /* ── Custom/Backward Compatibility ──────── */
+  | "custom"
+  | "menu"
+  | "solid"
+  | "solid-icon";
 export type RoundedStyle = "full" | "lg" | "md" | "sm" | "none";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -45,10 +52,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   loader?: React.ReactNode;
   /** Sets width to 100% of the parent container. */
   fullWidth?: boolean;
-  /** Optional content to show inside a hover tooltip. */
-  tooltipContent?: React.ReactNode | string | null;
+  tooltipDirection?: TooltipProps["direction"];
+  tooltipContent?: TooltipProps["content"];
 }
-
 
 /* ─────────────────────────────────────────────
    Maps
@@ -63,29 +69,50 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
  */
 const variantMap: Record<ButtonVariant, string> = {
   /* ── Solid ─────────────────────────────────────────── */
-  primary: "bg-sky-500     hover:bg-sky-600     active:bg-sky-700     text-white",
-  danger:  "bg-red-600     hover:bg-red-700     active:bg-red-800     text-white",
-  success: "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white",
-  warning: "bg-amber-500   hover:bg-amber-600   active:bg-amber-700   text-white",
-  black:   "bg-black       hover:bg-black/80    active:bg-black/70    text-white",
-  white:   "bg-white       hover:bg-white/80    active:bg-white/70    text-black",
-  soft:    "bg-sky-500/10  hover:bg-sky-500/20  active:bg-sky-500/30  text-sky-500",
+  primary:
+    "bg-sky-500     hover:bg-sky-600     active:bg-sky-700     text-white",
+  danger:
+    "bg-red-600     hover:bg-red-700     active:bg-red-800     text-white",
+  success:
+    "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white",
+  warning:
+    "bg-amber-500   hover:bg-amber-600   active:bg-amber-700   text-white",
+  black: "bg-black       hover:bg-black/80    active:bg-black/70    text-white",
+  white: "bg-white       hover:bg-white/80    active:bg-white/70    text-black",
+  soft: "bg-sky-500/10  hover:bg-sky-500/20  active:bg-sky-500/30  text-sky-500",
 
   /* ── Soft (coloured text, always-visible tint) ───────── */
-  "primary-soft": "text-sky-500     bg-current/10 hover:bg-current/15 active:bg-current/20",
-  "danger-soft":  "text-red-600     bg-current/10 hover:bg-current/15 active:bg-current/20",
-  "success-soft": "text-emerald-600 bg-current/10 hover:bg-current/15 active:bg-current/20",
-  "warning-soft": "text-amber-500   bg-current/10 hover:bg-current/15 active:bg-current/20",
-  "black-soft":   "text-black       bg-current/10 hover:bg-current/15 active:bg-current/20",
-  "white-soft":   "text-white       bg-current/10 hover:bg-current/15 active:bg-current/20",
+  "primary-soft":
+    "text-sky-500     bg-current/10 hover:bg-current/15 active:bg-current/20",
+  "danger-soft":
+    "text-red-600     bg-current/10 hover:bg-current/15 active:bg-current/20",
+  "success-soft":
+    "text-emerald-600 bg-current/10 hover:bg-current/15 active:bg-current/20",
+  "warning-soft":
+    "text-amber-500   bg-current/10 hover:bg-current/15 active:bg-current/20",
+  "black-soft":
+    "text-black       bg-current/10 hover:bg-current/15 active:bg-current/20",
+  "white-soft":
+    "text-white       bg-current/10 hover:bg-current/15 active:bg-current/20",
 
   /* ── Ghost (transparent → soft tint on hover) ──────── */
-  "primary-ghost": "text-sky-500     bg-transparent hover:bg-current/10 active:bg-current/15",
-  "danger-ghost":  "text-red-600     bg-transparent hover:bg-current/10 active:bg-current/15",
-  "success-ghost": "text-emerald-600 bg-transparent hover:bg-current/10 active:bg-current/15",
-  "warning-ghost": "text-amber-500   bg-transparent hover:bg-current/10 active:bg-current/15",
-  "black-ghost":   "text-black       bg-transparent hover:bg-current/10 active:bg-current/15",
-  "white-ghost":   "text-white       bg-transparent hover:bg-current/10 active:bg-current/15",
+  "primary-ghost":
+    "text-sky-500     bg-transparent hover:bg-current/10 active:bg-current/15",
+  "danger-ghost":
+    "text-red-600     bg-transparent hover:bg-current/10 active:bg-current/15",
+  "success-ghost":
+    "text-emerald-600 bg-transparent hover:bg-current/10 active:bg-current/15",
+  "warning-ghost":
+    "text-amber-500   bg-transparent hover:bg-current/10 active:bg-current/15",
+  "black-ghost":
+    "text-black       bg-transparent hover:bg-current/10 active:bg-current/15",
+  "white-ghost":
+    "text-white       bg-transparent hover:bg-current/10 active:bg-current/15",
+  /* ── Custom/Backward Compatibility ──────── */
+  custom: "w-auto h-auto p-0",
+  menu: "",
+  solid: "",
+  "solid-icon": "",
 };
 
 const roundedMap: Record<RoundedStyle, string> = {
@@ -110,7 +137,6 @@ export const Button = ({
   isLoading = false,
   loader,
   fullWidth = false,
-  tooltipContent,
   className,
   children,
   type = "button",
@@ -126,7 +152,7 @@ export const Button = ({
   const content = isLoading ? (loader ?? <Spinner size="sm" />) : children;
 
   return (
-    <Tooltip content={tooltipContent}>
+    <Tooltip direction={props.tooltipDirection} content={props.tooltipContent}>
       <button
         type={type}
         disabled={disabled || isLoading}
@@ -153,5 +179,3 @@ export const Button = ({
     </Tooltip>
   );
 };
-
-

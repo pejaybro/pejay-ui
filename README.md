@@ -1,6 +1,6 @@
 # pejay-ui
 
-A lightweight CLI tool to initialize, add, and remove React UI components in your projects.
+A lightweight CLI tool to initialize, add, and remove React UI components, layouts, overlays, and client scaffolding templates in your projects.
 
 ## Core Commands
 
@@ -9,7 +9,7 @@ A lightweight CLI tool to initialize, add, and remove React UI components in you
 npx pejay-ui init
 ```
 
-### 2. Add Component
+### 2. Add Component / Layout / Scaffold
 ```bash
 npx pejay-ui add <component-name-or-category> [options]
 ```
@@ -23,28 +23,34 @@ npx pejay-ui add <component-name-or-category> [options]
   ```bash
   npx pejay-ui add form/input
   ```
-- Install all components in a category (e.g., `form`):
+- Install a specific layout variant:
+  ```bash
+  npx pejay-ui add layouts/vr-1
+  ```
+- Install all components in a category (e.g., `form` or `layouts`):
   ```bash
   npx pejay-ui add form --all
+  npx pejay-ui add layouts --all
   ```
-- Select specific components to install from a category (e.g., `form`):
+- Select specific components to install from a category (e.g., `form` or `layouts`):
   ```bash
   npx pejay-ui add form --select
+  npx pejay-ui add layouts
   ```
-  *(Note: Running `npx pejay-ui add <category>` without options will default to the interactive selection prompt).*
+  *(Note: Running `npx pejay-ui add <category>` without options defaults to an interactive selection prompt).*
 
 **Automatic Exports (Auto-Indexing):**
 Installing components automatically generates or updates `index.ts` (or `index.js`) files at:
 1. The category level (e.g., `src/pejay-ui/components/form/index.ts`)
 2. The global components level (`src/pejay-ui/components/index.ts`)
 
-This allows you to easily import multiple components:
+This allows you to easily import multiple components clean and cleanly:
 ```typescript
 import { Input, Checkbox, AmountInput } from "@/pejay-ui/components";
 ```
 
 **Component-Specific Documentation (READMEs):**
-Certain components (like `toast`) ship with localized `README.md` guides. When you install them, the CLI automatically copies their detailed usage documentation directly into the component's folder (e.g., `src/pejay-ui/components/toast/README.md`) so you have helper docs right next to the code.
+Certain components (like `toast`, `spinner`, `skeleton`, and layout variants) ship with localized `README.md` guides. When installed, the CLI copies their detailed usage documentation directly into the component's folder so you have reference docs right next to the source code.
 
 **Overwrite Protection:**
 To prevent accidentally overwriting any custom modifications you have made to your components, the CLI checks if the component is already tracked in `pejay-ui.json` or if its files already exist in your workspace. It will ask for confirmation before overwriting:
@@ -52,7 +58,7 @@ To prevent accidentally overwriting any custom modifications you have made to yo
 ? Component '<name>' is already present in your project. Overwriting it will discard any local changes you have made. Do you want to proceed and overwrite it? (y/N)
 ```
 - Choosing **No** safely skips the installation, preserving your local changes.
-- Choosing **Yes** overwrites the files with a fresh copy of the component template.
+- Choosing **Yes** overwrites the files with a fresh copy of the template.
 
 ### 3. Remove Component
 ```bash
@@ -70,7 +76,7 @@ Lists all available components categorized, showing their local installation sta
 
 ---
 
-## Available Components & Scaffolds
+## Available Components, Layouts & Scaffolds
 
 ### Buttons
 ```bash
@@ -115,24 +121,37 @@ npx pejay-ui add dropdown/multiselect-input
 
 ### Layouts
 ```bash
-npx pejay-ui add layouts/lv1
+npx pejay-ui add layouts/vr-1  # Collapsible & Resizable Sidebar
+npx pejay-ui add layouts/vr-2  # Dual Sidebar (Left + Right)
+npx pejay-ui add layouts/vr-3  # Left Sidebar with Mobile Drawer / Fullscreen Overlay
+npx pejay-ui add layouts/vr-4  # Top Nav with Mobile Left Slide Drawer
+npx pejay-ui add layouts/vr-5  # Bottom Nav with Bottom Slide Drawer
 ```
 *(Supports category-wide commands: `npx pejay-ui add layouts --all` or `npx pejay-ui add layouts --select`)*
+
+### Overlays
+```bash
+npx pejay-ui add overlays/portal
+npx pejay-ui add overlays/tooltip
+npx pejay-ui add overlays/scrollbar
+```
+*(Supports category-wide commands: `npx pejay-ui add overlays --all` or `npx pejay-ui add overlays --select`)*
+
+### Panels & Modals
+```bash
+npx pejay-ui add panels
+```
+
+### Hotkeys & Keyboard Shortcuts
+```bash
+npx pejay-ui add hotkeys
+```
 
 ### Toast
 ```bash
 npx pejay-ui add toast
 ```
 *(Includes a localized `README.md` guide copied directly into your components folder).*
-
-### Overlays
-```bash
-npx pejay-ui add overlays/portal
-```
-```bash
-npx pejay-ui add overlays/tooltip
-```
-*(Supports category-wide commands: `npx pejay-ui add overlays --all` or `npx pejay-ui add overlays --select`)*
 
 ### Spinners
 ```bash
@@ -146,24 +165,14 @@ npx pejay-ui add skeleton
 ```
 *(Includes a localized `README.md` showing all skeleton presets).*
 
-### Scaffolds & Templates
+### Scaffolds & Client Templates
 ```bash
 npx pejay-ui add tanstack-query-client
-```
-```bash
 npx pejay-ui add react-router-client
-```
-```bash
 npx pejay-ui add tanstack-router-client
-```
-```bash
 npx pejay-ui add axios-client
-```
-```bash
 npx pejay-ui add redux-store-client
-```
-```bash
 npx pejay-ui add rtk-query-client
+npx pejay-ui add zustand-client
 ```
 *(Supports category-wide commands: `npx pejay-ui add scaffold --all` or `npx pejay-ui add scaffold --select`)*
-
