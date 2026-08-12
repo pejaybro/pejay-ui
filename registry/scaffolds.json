@@ -12,6 +12,19 @@
     ],
     "supportsCategory": true
   },
+  "tanstack-query-electron-client": {
+    "name": "TanstackQueryElectronClient",
+    "category": "scaffold",
+    "subcategory": "tanstack-query-electron",
+    "targetDirName": "tanstack-query-electron",
+    "files": [
+      "templates/scaffolds/tanstack-query-electron"
+    ],
+    "peerDependencies": [
+      "@tanstack/react-query"
+    ],
+    "supportsCategory": true
+  },
   "react-router-client": {
     "name": "ReactRouterClient",
     "category": "scaffold",
@@ -22,6 +35,20 @@
     ],
     "peerDependencies": [
       "react-router-dom"
+    ],
+    "supportsCategory": true
+  },
+  "react-router-electron-client": {
+    "name": "ReactRouterElectronClient",
+    "category": "scaffold",
+    "subcategory": "react-router-electron",
+    "targetDirName": "react-router-electron",
+    "files": [
+      "templates/scaffolds/react-router-electron"
+    ],
+    "peerDependencies": [
+      "react-router-dom",
+      "lucide-react"
     ],
     "supportsCategory": true
   },
@@ -73,6 +100,20 @@
     "targetDirName": "rtk-query",
     "files": [
       "templates/scaffolds/rtk-query"
+    ],
+    "peerDependencies": [
+      "@reduxjs/toolkit",
+      "react-redux"
+    ],
+    "supportsCategory": true
+  },
+  "rtk-query-electron-client": {
+    "name": "RtkQueryElectronClient",
+    "category": "scaffold",
+    "subcategory": "rtk-query-electron",
+    "targetDirName": "rtk-query-electron",
+    "files": [
+      "templates/scaffolds/rtk-query-electron"
     ],
     "peerDependencies": [
       "@reduxjs/toolkit",
