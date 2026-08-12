@@ -93,17 +93,23 @@ export const GlobalScrollProvider: React.FC<GlobalScrollProviderProps> = ({
     }
 
     const containerBounds = el.getBoundingClientRect();
-    const minThumbHeight = 32;
-    const calculatedHeight = Math.max((clientHeight / scrollHeight) * clientHeight, minThumbHeight);
+    const marginOffset = 6;
+    const availableTrackHeight = Math.max(0, clientHeight - marginOffset * 2);
+
+    const minThumbHeight = 24;
+    const calculatedHeight = Math.max(
+      (clientHeight / scrollHeight) * availableTrackHeight,
+      minThumbHeight
+    );
     const maxScrollTop = scrollHeight - clientHeight;
-    const maxThumbTop = clientHeight - calculatedHeight;
-    const thumbTopOffset = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
-    const marginOffset = 6; // 6px margin away from top, bottom, and right edges
+    const maxThumbTop = availableTrackHeight - calculatedHeight;
+    const thumbTopOffset =
+      maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
 
     setThumbRect({
       top: containerBounds.top + marginOffset + thumbTopOffset,
       left: containerBounds.right - 10,
-     height: Math.max(calculatedHeight - (marginOffset * 2), 24),
+      height: calculatedHeight,
       width: isThumbHovered || isDragging ? 8 : 6,
     });
   }, [isThumbHovered, isDragging]);
@@ -207,6 +213,27 @@ export const GlobalScrollProvider: React.FC<GlobalScrollProviderProps> = ({
       window.removeEventListener("resize", updateThumbPosition);
     };
   }, [findScrollableParent, triggerVisibility, updateThumbPosition, isDragging]);
+
+  /* ==========================================================================
+   * ResizeObserver for Active Container Expand/Collapse Resizing
+   * ========================================================================== */
+  useEffect(() => {
+    const el = activeContainerRef.current;
+    if (!el) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateThumbPosition();
+    });
+
+    resizeObserver.observe(el);
+    if (el.firstElementChild) {
+      resizeObserver.observe(el.firstElementChild);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [updateThumbPosition]);
 
   /* ==========================================================================
    * Thumb Drag Handler (Instant 1:1 mouse tracking)

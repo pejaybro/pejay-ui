@@ -2,15 +2,15 @@
  * ============================================================================
  * CUSTOM SCROLL AREA — Reusable React & Tailwind Component
  * ============================================================================
- *
+ * 
  * HOW TO USE THIS COMPONENT IN ANY REACT + TAILWIND PROJECT:
- *
+ * 
  * 1. Copy this file into your project (e.g., `src/pejay-ui/components/custom-scroll-area.tsx`).
  * 2. Add native scrollbar suppression in your CSS (see readme.scrollbar.md).
  * 3. Import and wrap any overflow content:
- *
+ * 
  *    import { CustomScrollArea } from "@/src/pejay-ui/components";
- *
+ * 
  *    function MyPage() {
  *      return (
  *        <CustomScrollArea className="h-96 w-full p-4">
@@ -18,9 +18,9 @@
  *        </CustomScrollArea>
  *      );
  *    }
- *
+ * 
  * 4. Customizing Settings via Props:
- *    <CustomScrollArea
+ *    <CustomScrollArea 
  *      hideDelay={2000}          // Idle time (ms) before fade-out (Default: 1800ms)
  *      thumbWidth="w-2"          // Tailwind width class for thumb (Default: "w-1.5")
  *      thumbColor="bg-purple-500" // Tailwind color class (Default: "bg-chalk-40")
@@ -37,13 +37,13 @@ import { cn } from "@/pejay-ui/utils/cn";
 export interface CustomScrollAreaProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   className?: string;
-  hideDelay?: number; // Delay (ms) before auto-hiding when idle
-  fadeDurationMs?: number; // Fade transition duration (ms)
-  thumbWidth?: string; // Default thumb width Tailwind class
-  thumbHoverWidth?: string; // Hovered/Dragged thumb width Tailwind class
-  thumbColor?: string; // Idle thumb color
-  thumbHoverColor?: string; // Hovered/Dragged thumb color
-  smoothWheel?: boolean; // Enable smooth momentum wheel scroll
+  hideDelay?: number;         // Delay (ms) before auto-hiding when idle
+  fadeDurationMs?: number;    // Fade transition duration (ms)
+  thumbWidth?: string;        // Default thumb width Tailwind class
+  thumbHoverWidth?: string;   // Hovered/Dragged thumb width Tailwind class
+  thumbColor?: string;        // Idle thumb color
+  thumbHoverColor?: string;   // Hovered/Dragged thumb color
+  smoothWheel?: boolean;      // Enable smooth momentum wheel scroll
 }
 
 export const CustomScrollArea = ({
@@ -81,18 +81,22 @@ export const CustomScrollArea = ({
     if (!el) return;
 
     const { scrollTop, scrollHeight, clientHeight } = el;
-    if (scrollHeight <= clientHeight) {
+    if (scrollHeight <= clientHeight + 1) {
       setThumbHeight(0);
       return;
     }
 
+    // Inset track padding: top-1.5 (6px) + bottom-1.5 (6px) = 12px total
+    const trackPadding = 12;
+    const availableTrackHeight = Math.max(0, clientHeight - trackPadding);
+
     const minThumbHeight = 32;
     const calculatedHeight = Math.max(
-      (clientHeight / scrollHeight) * clientHeight,
-      minThumbHeight,
+      (clientHeight / scrollHeight) * availableTrackHeight,
+      minThumbHeight
     );
     const maxScrollTop = scrollHeight - clientHeight;
-    const maxThumbTop = clientHeight - calculatedHeight;
+    const maxThumbTop = availableTrackHeight - calculatedHeight;
     const calculatedTop =
       maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
 
@@ -164,7 +168,7 @@ export const CustomScrollArea = ({
 
       targetScrollTop.current = Math.min(
         maxScroll,
-        Math.max(0, targetScrollTop.current + e.deltaY),
+        Math.max(0, targetScrollTop.current + e.deltaY)
       );
 
       triggerVisibility();
@@ -179,10 +183,34 @@ export const CustomScrollArea = ({
     return () => el.removeEventListener("wheel", handleWheel);
   }, [smoothWheel, triggerVisibility, updateScrollbar]);
 
+  /* ==========================================================================
+   * [3.5] ResizeObserver for Container & Content Expand/Collapse
+   * ========================================================================== */
   useEffect(() => {
-    updateScrollbar();
+    const el = containerRef.current;
+    if (!el) return;
+
+    // Use requestAnimationFrame to prevent set-state-in-effect warning
+    const rafId = requestAnimationFrame(() => {
+      updateScrollbar();
+    });
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateScrollbar();
+    });
+
+    resizeObserver.observe(el);
+    if (el.firstElementChild) {
+      resizeObserver.observe(el.firstElementChild);
+    }
+
     window.addEventListener("resize", updateScrollbar);
-    return () => window.removeEventListener("resize", updateScrollbar);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateScrollbar);
+    };
   }, [updateScrollbar]);
 
   /* ==========================================================================
@@ -209,7 +237,7 @@ export const CustomScrollArea = ({
       const deltaY = moveEvent.clientY - startY;
       const newScrollTop = Math.min(
         maxScrollTop,
-        Math.max(0, startScrollTop + (deltaY / maxThumbTop) * maxScrollTop),
+        Math.max(0, startScrollTop + (deltaY / maxThumbTop) * maxScrollTop)
       );
 
       // Instant 1:1 direct scroll update
@@ -282,8 +310,7 @@ export const CustomScrollArea = ({
               "rounded-full cursor-pointer pointer-events-auto transition-[background-color,width] duration-150",
               thumbWidth,
               thumbColor,
-              (isThumbHovered || isDragging) &&
-                `${thumbHoverWidth} ${thumbHoverColor}`,
+              (isThumbHovered || isDragging) && `${thumbHoverWidth} ${thumbHoverColor}`,
             )}
           />
         </div>
