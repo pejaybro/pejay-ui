@@ -1,0 +1,13 @@
+{
+  "horizontal-tabs": {
+    "name": "HorizontalTabMenu",
+    "category": "horizontal-tabs",
+    "files": [
+      "templates/horizontal-tabs/horizontal-tab-menu.tsx",
+      "templates/horizontal-tabs/horizontal-tabs.config.ts",
+      "templates/horizontal-tabs/README.md"
+    ],
+    "utils": ["cn.ts"],
+    "peerDependencies": ["clsx", "tailwind-merge", "lucide-react"]
+  }
+}
