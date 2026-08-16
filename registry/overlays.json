@@ -21,6 +21,24 @@
       "@floating-ui/react"
     ]
   },
+  "overlays/popover": {
+    "name": "Popover",
+    "category": "overlays",
+    "files": [
+      "templates/overlays/popover/popover.tsx",
+      "templates/overlays/popover/README.md",
+      "templates/overlays/popover/readme.popover.md"
+    ],
+    "utils": [
+      "cn.ts"
+    ],
+    "supportsCategory": true,
+    "peerDependencies": [
+      "clsx",
+      "tailwind-merge",
+      "@floating-ui/react"
+    ]
+  },
   "overlays/scrollbar": {
     "name": "Scrollbar",
     "category": "overlays",

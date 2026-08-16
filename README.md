@@ -9,7 +9,7 @@ A lightweight CLI tool to initialize, add, and remove React UI components, layou
 npx pejay-ui init
 ```
 
-### 2. Add Component / Layout / Scaffold
+### 2. Add Component / Layout / Scaffold / Utility
 ```bash
 npx pejay-ui add <component-name-or-category> [options]
 ```
@@ -22,15 +22,18 @@ npx pejay-ui add <component-name-or-category> [options]
 - Install a single component directly:
   ```bash
   npx pejay-ui add form/input
+  npx pejay-ui add utilities/clipboard
   ```
 - Install a specific layout variant:
   ```bash
   npx pejay-ui add layouts/vr-1
   ```
-- Install all components in a category (e.g., `form` or `layouts`):
+- Install all components in a category (e.g., `form`, `layouts`, `overlays`, or `utilities`):
   ```bash
   npx pejay-ui add form --all
   npx pejay-ui add layouts --all
+  npx pejay-ui add overlays --all
+  npx pejay-ui add utilities --all
   ```
 - Select specific components to install from a category (e.g., `form` or `layouts`):
   ```bash
@@ -50,7 +53,7 @@ import { Input, Checkbox, AmountInput } from "@/pejay-ui/components";
 ```
 
 **Component-Specific Documentation (READMEs):**
-Certain components (like `toast`, `spinner`, `skeleton`, and layout variants) ship with localized `README.md` guides. When installed, the CLI copies their detailed usage documentation directly into the component's folder so you have reference docs right next to the source code.
+Certain components (like `toast`, `popover`, `spinner`, `skeleton`, `horizontal-tabs`, layout variants, and utilities) ship with localized `README.md` guides. When installed, the CLI copies their detailed usage documentation directly into the component's folder so you have reference docs right next to the source code.
 
 **Overwrite Protection:**
 To prevent accidentally overwriting any custom modifications you have made to your components, the CLI checks if the component is already tracked in `pejay-ui.json` or if its files already exist in your workspace. It will ask for confirmation before overwriting:
@@ -119,6 +122,12 @@ npx pejay-ui add dropdown/multiselect-input
 ```
 *(Supports category-wide commands: `npx pejay-ui add dropdown --all` or `npx pejay-ui add dropdown --select`)*
 
+### Horizontal Tabs
+```bash
+npx pejay-ui add horizontal-tab-menu
+```
+*(Supports category-wide commands: `npx pejay-ui add horizontal-tabs --all` or `npx pejay-ui add horizontal-tabs --select`)*
+
 ### Layouts
 ```bash
 npx pejay-ui add layouts/vr-1  # Collapsible & Resizable Sidebar
@@ -133,6 +142,7 @@ npx pejay-ui add layouts/vr-5  # Bottom Nav with Bottom Slide Drawer
 ```bash
 npx pejay-ui add overlays/portal
 npx pejay-ui add overlays/tooltip
+npx pejay-ui add overlays/popover
 npx pejay-ui add overlays/scrollbar
 ```
 *(Supports category-wide commands: `npx pejay-ui add overlays --all` or `npx pejay-ui add overlays --select`)*
@@ -165,14 +175,26 @@ npx pejay-ui add skeleton
 ```
 *(Includes a localized `README.md` showing all skeleton presets).*
 
+### Utilities
+```bash
+npx pejay-ui add utilities/clipboard
+npx pejay-ui add utilities/sanitize
+npx pejay-ui add utilities/formater-datetime
+npx pejay-ui add utilities/formater-phonenumber
+```
+*(Supports category-wide commands: `npx pejay-ui add utilities --all` or `npx pejay-ui add utilities --select`)*
+
 ### Scaffolds & Client Templates
 ```bash
 npx pejay-ui add tanstack-query-client
+npx pejay-ui add tanstack-query-electron-client
 npx pejay-ui add react-router-client
+npx pejay-ui add react-router-electron-client
 npx pejay-ui add tanstack-router-client
 npx pejay-ui add axios-client
 npx pejay-ui add redux-store-client
 npx pejay-ui add rtk-query-client
+npx pejay-ui add rtk-query-electron-client
 npx pejay-ui add zustand-client
 ```
 *(Supports category-wide commands: `npx pejay-ui add scaffold --all` or `npx pejay-ui add scaffold --select`)*

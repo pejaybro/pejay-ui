@@ -1,0 +1,48 @@
+{
+  "utilities/clipboard": {
+    "name": "Clipboard",
+    "category": "utilities",
+    "outputDirectory": "utils",
+    "files": [
+      "templates/utilities/clipboard.ts",
+      "templates/utilities/clipboard.md"
+    ],
+    "dependencies": [
+      "toast"
+    ],
+    "peerDependencies": [
+      "lucide-react"
+    ],
+    "supportsCategory": true
+  },
+  "utilities/sanitize": {
+    "name": "Sanitize",
+    "category": "utilities",
+    "outputDirectory": "utils",
+    "files": [
+      "templates/utilities/sanitize.ts",
+      "templates/utilities/sanitize.md"
+    ],
+    "supportsCategory": true
+  },
+  "utilities/formater-datetime": {
+    "name": "FormaterDateTime",
+    "category": "utilities",
+    "outputDirectory": "utils",
+    "files": [
+      "templates/utilities/formater.dateTime.ts",
+      "templates/utilities/formater.dateTime.md"
+    ],
+    "supportsCategory": true
+  },
+  "utilities/formater-phonenumber": {
+    "name": "FormaterPhoneNumber",
+    "category": "utilities",
+    "outputDirectory": "utils",
+    "files": [
+      "templates/utilities/formater.phoneNumber.ts",
+      "templates/utilities/formater.phoneNumber.md"
+    ],
+    "supportsCategory": true
+  }
+}

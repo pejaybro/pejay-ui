@@ -6,14 +6,27 @@
     "moduleResolution": "bundler",
     "paths": {
       "@/*": ["./*"],
+      "@/pejay-ui/components": ["./templates"],
       "@/pejay-ui/components/*": ["./templates/*"],
-      "@/pejay-ui/utils/*": ["./utils/*"],
+      "@/pejay-ui/utils/*": ["./utils/*", "./templates/utilities/*"],
       "@/pejay-ui/panels": ["./templates/panels"],
       "@/pejay-ui/panels/*": ["./templates/panels/*"],
       "@/pejay-ui/hotkeys": ["./templates/hotkeys"],
       "@/pejay-ui/hotkeys/*": ["./templates/hotkeys/*"],
       "@/pejay-ui/spinner": ["./templates/spinner"],
-      "@/pejay-ui/spinner/*": ["./templates/spinner/*"]
+      "@/pejay-ui/spinner/*": ["./templates/spinner/*"],
+      "@/pejay-ui/toast": ["./templates/toast"],
+      "@/pejay-ui/toast/*": ["./templates/toast/*"],
+      "@/pejay-ui/overlays": ["./templates/overlays"],
+      "@/pejay-ui/overlays/*": ["./templates/overlays/*"],
+      "@/pejay-ui/button": ["./templates/button"],
+      "@/pejay-ui/button/*": ["./templates/button/*"],
+      "@/pejay-ui/skeleton": ["./templates/skeleton"],
+      "@/pejay-ui/skeleton/*": ["./templates/skeleton/*"],
+      "@/pejay-ui/select-dropdown": ["./templates/select-dropdown"],
+      "@/pejay-ui/select-dropdown/*": ["./templates/select-dropdown/*"],
+      "@/pejay-ui/horizontal-tabs": ["./templates/horizontal-tabs"],
+      "@/pejay-ui/horizontal-tabs/*": ["./templates/horizontal-tabs/*"]
     },
     "jsx": "react-jsx",
     "strict": true,
@@ -24,7 +37,6 @@
   "include": ["templates/**/*", "utils/**/*"],
   "exclude": [
     "templates/scaffolds/**/*",
-    "templates/utilities/**/*",
     "templates/notes/**/*"
   ]
 }
