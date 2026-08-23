@@ -8,8 +8,21 @@ import { cn } from "@/pejay-ui/utils/cn";
  * ============================================================================
  */
 
+export interface CheckboxStyles {
+  /** Decorative classes for the label */
+  label?: string;
+  /** Decorative classes for the description */
+  description?: string;
+  /** Decorative classes for the checkbox box container */
+  box?: string;
+  /** Decorative classes for the checkmark icon */
+  icon?: string;
+}
+
 /* Prop configuration for the Checkbox component */
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  /** Optional custom styles object for decorative overrides */
+  styles?: CheckboxStyles;
   /* Title label of the checkbox */
   label?: string;
   /* Help or descriptive text for the checkbox */
@@ -48,6 +61,7 @@ export const Checkbox = ({
   onChange,
   className,
   id,
+  styles,
   ...props
 }: CheckboxProps) => {
   const checkboxId = id || React.useId();
@@ -101,7 +115,8 @@ export const Checkbox = ({
               checked
                 ? "bg-white scale-110"
                 : "bg-white",
-              "peer-focus-visible:ring-4 peer-focus-visible:ring-sky-500/10 peer-focus-visible:border-sky-500"
+              "peer-focus-visible:ring-4 peer-focus-visible:ring-sky-500/10 peer-focus-visible:border-sky-500",
+              styles?.box,
             )}
           >
             {/* Checked checkmark icon indicator */}
@@ -111,7 +126,8 @@ export const Checkbox = ({
               className={cn(
                 "transition-all duration-200 transform",
                 checked ? "scale-100 opacity-100" : "scale-50 opacity-0",
-                "text-black"
+                "text-black",
+                styles?.icon,
               )}
             />
           </div>
@@ -121,7 +137,12 @@ export const Checkbox = ({
         {(label || description) && (
           <div className={cn("flex flex-col gap-0.5 min-w-0", isSideLabel ? (labelWidth || "flex-1") : "w-full", xAlignment === "left" && "items-start text-left", xAlignment === "right" && "items-end text-right", xAlignment === "center" && "items-center text-center")}>
             {label && (
-              <span className="whitespace-normal break-words w-full capitalize text-sm font-medium text-black">
+              <span
+                className={cn(
+                  "whitespace-normal break-words w-full capitalize text-sm font-medium text-black",
+                  styles?.label,
+                )}
+              >
                 {label}
                 {props.required && (
                   <span className="ml-1 font-black text-red-500">*</span>
@@ -129,7 +150,12 @@ export const Checkbox = ({
               </span>
             )}
             {description && (
-              <span className="leading-tight whitespace-normal break-words w-full text-xs text-black">
+              <span
+                className={cn(
+                  "leading-tight whitespace-normal break-words w-full text-xs text-black",
+                  styles?.description,
+                )}
+              >
                 {description}
               </span>
             )}

@@ -1,12 +1,19 @@
 import React from "react";
 import { cn } from "@/pejay-ui/utils/cn";
-import { Checkbox, type CheckboxProps } from "./checkbox";
+import { Checkbox, type CheckboxProps, type CheckboxStyles } from "./checkbox";
 
 /*
  * ============================================================================
  * Types & Interfaces
  * ============================================================================
  */
+
+export interface CheckboxGroupStyles extends CheckboxStyles {
+  /** Decorative classes for the group title label */
+  groupLabel?: string;
+  /** Decorative classes for the group description helper text */
+  groupDescription?: string;
+}
 
 /* Represents an individual checkbox item configuration */
 interface CheckboxOption {
@@ -28,7 +35,10 @@ interface CheckboxGroupProps extends Omit<
   | "defaultValue"
   | "options"
   | "error"
+  | "styles"
 > {
+  /** Optional custom styles object for decorative overrides */
+  styles?: CheckboxGroupStyles;
   /* Title label of the group */
   label?: string;
   /* Help or descriptive text for the entire group */
@@ -64,14 +74,15 @@ export const CheckboxGroup = ({
   description,
   error,
   type = "multiple",
-  value,
   defaultValue,
+  value,
   onChange,
   options = [],
-  className,
   labelWidth = "w-full",
   labelAlign = "left",
   indicator,
+  className,
+  styles,
   ...props
 }: CheckboxGroupProps) => {
   /* Pure Controlled State: Source value directly from parent-provided props */
@@ -107,12 +118,22 @@ export const CheckboxGroup = ({
             )}
           >
             {label && (
-              <span className="tracking-tight uppercase text-sm font-bold text-black">
+              <span
+                className={cn(
+                  "tracking-tight uppercase text-sm font-bold text-black",
+                  styles?.groupLabel,
+                )}
+              >
                 {label}
               </span>
             )}
             {description && (
-              <span className="mt-0.5 leading-tight text-[11px] font-medium text-black">
+              <span
+                className={cn(
+                  "mt-0.5 leading-tight text-[11px] font-medium text-black",
+                  styles?.groupDescription,
+                )}
+              >
                 {description}
               </span>
             )}
@@ -168,6 +189,7 @@ export const CheckboxGroup = ({
                   checked={isChecked}
                   onChange={() => handleCheckboxChange(option.value)}
                   className="shrink-0 flex-1"
+                  styles={styles}
                   {...props}
                 />
               </div>

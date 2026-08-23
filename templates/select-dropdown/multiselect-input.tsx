@@ -34,7 +34,22 @@ function getNextSelectableIndex(
   return currentIndex;
 }
 
+export interface MultiSelectInputStyles {
+  /** Decorative classes for the trigger box container */
+  inputBox?: string;
+  /** Decorative classes for the inner input or selected text */
+  input?: string;
+  /** Decorative classes for prefix icon */
+  prefixIcon?: string;
+  /** Decorative classes for right icon / chevron */
+  rightIcon?: string;
+  /** Decorative classes for the chip tag badge */
+  chip?: string;
+}
+
 export interface MultiSelectInputProps {
+  /** Optional custom styles object for decorative overrides */
+  styles?: MultiSelectInputStyles;
   /** Array of option objects: { id, label, key } */
   options: SelectOption[];
   /** Controlled array of selected keys */
@@ -114,6 +129,7 @@ export function MultiSelectInput({
   searchable = false,
   searchPosition = "trigger",
   error,
+  styles,
 }: MultiSelectInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -407,6 +423,7 @@ export function MultiSelectInput({
             "border-red-500 focus-within:border-red-500 focus-within:ring-red-500/10",
           (disabled || loading) &&
             "opacity-50 pointer-events-none cursor-not-allowed border-gray-300",
+          styles?.inputBox,
         )}
       >
         {/* Left Prefix Icon Area */}
@@ -416,7 +433,12 @@ export function MultiSelectInput({
             selectedOptions.length > 0 &&
             !loading
           ) && (
-            <div className="flex items-center pl-3 text-black shrink-0 self-stretch min-h-[36px]">
+            <div
+              className={cn(
+                "flex items-center pl-3 text-black shrink-0 self-stretch min-h-[36px]",
+                styles?.prefixIcon,
+              )}
+            >
               {prefixIcon}
             </div>
           )}
@@ -475,7 +497,10 @@ export function MultiSelectInput({
                   {selectedOptions.map(opt => (
                     <div
                       key={opt.key}
-                      className="flex items-center justify-between gap-1 w-[120px] bg-gray-155 bg-sky-500/10 text-sky-500 px-2 py-0.5 rounded-md text-xs shrink-0  font-medium"
+                      className={cn(
+                        "flex items-center justify-between gap-1 w-[120px] bg-gray-155 bg-sky-500/10 text-sky-500 px-2 py-0.5 rounded-md text-xs shrink-0  font-medium",
+                        styles?.chip,
+                      )}
                     >
                       <TruncatedTooltip
                         content={opt.label}
@@ -499,7 +524,10 @@ export function MultiSelectInput({
                     <input
                       ref={inputRef}
                       type="text"
-                      className="bg-transparent border-none text-black placeholder:text-gray-400 outline-none text-left p-0 text-xs flex-1 min-w-[60px] h-5 font-medium"
+                      className={cn(
+                        "bg-transparent border-none text-black placeholder:text-gray-400 outline-none text-left p-0 text-xs flex-1 min-w-[60px] h-5 font-medium",
+                        styles?.input,
+                      )}
                       placeholder={
                         selectedOptions.length === 0
                           ? options.length === 0
@@ -525,7 +553,10 @@ export function MultiSelectInput({
                     <input
                       ref={inputRef}
                       type="text"
-                      className="w-full bg-transparent border-none text-black placeholder:text-gray-400 outline-none text-left p-0 text-sm font-medium"
+                      className={cn(
+                        "w-full bg-transparent border-none text-black placeholder:text-gray-400 outline-none text-left p-0 text-sm font-medium",
+                        styles?.input,
+                      )}
                       placeholder={
                         selectedOptions.length > 0
                           ? `${selectedOptions.length} selected`
@@ -554,7 +585,12 @@ export function MultiSelectInput({
                       content={selectedOptions.map(o => o.label).join(", ")}
                       enabled={showTooltip && selectedOptions.length > 0}
                     >
-                      <span className="truncate text-black flex-1 text-left font-medium">
+                      <span
+                        className={cn(
+                          "truncate text-black flex-1 text-left font-medium",
+                          styles?.input,
+                        )}
+                      >
                         {selectedOptions.length > 0
                           ? `${selectedOptions.length} selected`
                           : options.length === 0
@@ -570,7 +606,12 @@ export function MultiSelectInput({
         </div>
 
         {/* Right Caret Icon Area */}
-        <div className="flex items-center pr-3 pl-1 text-black shrink-0 self-stretch min-h-[36px]">
+        <div
+          className={cn(
+            "flex items-center pr-3 pl-1 text-black shrink-0 self-stretch min-h-[36px]",
+            styles?.rightIcon,
+          )}
+        >
           {loading ? (
             <Loader2 size={16} className="animate-spin text-sky-500" />
           ) : (

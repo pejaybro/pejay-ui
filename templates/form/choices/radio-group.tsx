@@ -1,12 +1,19 @@
 import React from "react";
 import { cn } from "@/pejay-ui/utils/cn";
-import { Radio, type RadioProps } from "./radio";
+import { Radio, type RadioProps, type RadioStyles } from "./radio";
 
 /*
  * ============================================================================
  * Types & Interfaces
  * ============================================================================
  */
+
+export interface RadioGroupStyles extends RadioStyles {
+  /** Decorative classes for the group title label */
+  groupLabel?: string;
+  /** Decorative classes for the group description helper text */
+  groupDescription?: string;
+}
 
 /* Represents an individual radio item configuration */
 export interface RadioOption {
@@ -27,7 +34,10 @@ interface RadioGroupProps extends Omit<
   | "defaultValue"
   | "options"
   | "error"
+  | "styles"
 > {
+  /** Optional custom styles object for decorative overrides */
+  styles?: RadioGroupStyles;
   /* Title label of the group */
   label?: string;
   /* Help or descriptive text for the entire group */
@@ -66,6 +76,7 @@ export const RadioGroup = ({
   className,
   labelWidth = "w-full",
   labelAlign = "left",
+  styles,
   ...props
 }: RadioGroupProps) => {
   const uniqueName = React.useId();
@@ -93,12 +104,22 @@ export const RadioGroup = ({
             )}
           >
             {label && (
-              <span className="tracking-tight uppercase text-sm font-bold text-black">
+              <span
+                className={cn(
+                  "tracking-tight uppercase text-sm font-bold text-black",
+                  styles?.groupLabel,
+                )}
+              >
                 {label}
               </span>
             )}
             {description && (
-              <span className="mt-0.5 leading-tight text-[11px] font-medium text-black">
+              <span
+                className={cn(
+                  "mt-0.5 leading-tight text-[11px] font-medium text-black",
+                  styles?.groupDescription,
+                )}
+              >
                 {description}
               </span>
             )}
@@ -126,6 +147,7 @@ export const RadioGroup = ({
                   onChange={() => handleRadioChange(option.value)}
                   className="flex-1 min-w-0"
                   value={option.value}
+                  styles={styles}
                   {...props}
                 />
               </div>

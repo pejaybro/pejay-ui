@@ -7,7 +7,7 @@ import { Input } from "./input";
  * ============================================================================
  */
 
-interface PhoneInputProps extends React.ComponentProps<typeof Input> {
+export interface PhoneInputProps extends React.ComponentProps<typeof Input> {
   /* Maximum characters allowed in phone number input string */
   maxLength?: number;
 }

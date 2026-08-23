@@ -6,10 +6,25 @@ import { cn } from "@/pejay-ui/utils/cn";
  * Types & Interfaces for TextArea Component
  * ============================================================================
  */
+export interface TextAreaStyles {
+  /** Decorative classes for the textarea box container (e.g. bg color, border color, focus rings) */
+  inputBox?: string;
+  /** Decorative classes for the inner textarea text, font, and placeholder */
+  input?: string;
+  /** Decorative classes for the main label */
+  label?: string;
+  /** Decorative classes for the secondary description helper text */
+  description?: string;
+  /** Decorative classes for character and word count labels */
+  count?: string;
+}
+
 interface TextAreaProps extends Omit<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
   "prefix"
 > {
+  /** Optional custom styles object for decorative overrides (input box, label, description, count) */
+  styles?: TextAreaStyles;
   /** Main label displayed above or next to the textarea */
   label?: string;
   /** Helper description text shown below the label */
@@ -66,6 +81,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       wrapperClassName,
       inputClassName,
       className,
+      styles,
       onFocus,
       onBlur,
       onChange,
@@ -100,7 +116,28 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           ? `${Math.min(newHeight, parseInt(maxHeight))}px`
           : `${newHeight}px`;
       }
-    }, [props.value, internalHasContent, autoResize, maxHeight]);
+    }, [autoResize, maxHeight, props.value]);
+
+    // Track word and char counts on input mutations
+    const handleTextCounts = (val: string) => {
+      setCharCount(val.length);
+      const words = val.trim().split(/\s+/).filter(Boolean);
+      setWordCount(val.trim() === "" ? 0 : words.length);
+    };
+
+    // Event interception logic for tracking and enforcing length and word constraints
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const val = e.target.value;
+      if (maxWordLimit) {
+        const words = val.trim().split(/\s+/).filter(Boolean);
+        if (words.length > maxWordLimit && val.length > (props.value?.toString().length || 0)) {
+          return;
+        }
+      }
+      setInternalHasContent(val.length > 0);
+      handleTextCounts(val);
+      onChange?.(e);
+    };
 
     const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
       setIsFocused(true);
@@ -109,31 +146,12 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
     const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
       setIsFocused(false);
-      setInternalHasContent(e.target.value !== "");
       onBlur?.(e);
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const val = e.target.value;
-
-      // Enforce word limits if configured
-      if (maxWordLimit) {
-        const words = val.trim().split(/\s+/).filter(Boolean);
-        if (words.length > maxWordLimit) return;
-      }
-
-      setInternalHasContent(val !== "");
-      setCharCount(val.length);
-      setWordCount(val.trim().split(/\s+/).filter(Boolean).length);
-
-      onChange?.(e);
-    };
-
+    // Layout alignment presets for side-by-side placements
     const isSideLabel = labelPlacement === "left" || labelPlacement === "right";
-
-    const xAlignment =
-      labelAlignX || (labelPlacement === "left" ? "right" : "left");
-
+    const xAlignment = labelAlignX || (labelPlacement === "left" ? "right" : "left");
     const yAlignmentClass =
       labelAlignY === "top"
         ? "items-start"
@@ -141,12 +159,13 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           ? "items-end"
           : "items-center";
 
+    // Rounded variant resolution
     const radiusClass =
-      variant === "square"
-        ? "rounded-none"
-        : variant === "curved"
-          ? "rounded-lg"
-          : "rounded-full";
+      variant === "rounded"
+        ? "rounded-2xl"
+        : variant === "square"
+          ? "rounded-none"
+          : "rounded-lg";
 
     return (
       <div
@@ -177,11 +196,21 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 xAlignment === "center" && "items-center text-center",
               )}
             >
-              <span className="text-md font-medium text-black">
+              <span
+                className={cn(
+                  "text-md font-medium text-black",
+                  styles?.label,
+                )}
+              >
                 {label}
               </span>
               {description && (
-                <span className="text-xs text-black font-medium mt-0.5">
+                <span
+                  className={cn(
+                    "text-xs font-medium text-black mt-0.5",
+                    styles?.description,
+                  )}
+                >
                   {description}
                 </span>
               )}
@@ -194,12 +223,13 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           {/* Styled wrapper container for borders and states */}
           <div
             className={cn(
-              "relative w-full bg-white border-[1.5px] border-black transition-all duration-200 min-h-[80px]",
+              "relative w-full bg-white border-[1.5px] border-black transition-all duration-200 min-h-20",
               radiusClass,
               isFocused
                 ? "border-sky-500 ring-4 ring-sky-500/10 shadow-sm"
                 : "hover:border-gray-800",
               error ? "border-red-600 ring-4 ring-red-600/10" : "",
+              styles?.inputBox,
               wrapperClassName,
             )}
           >
@@ -215,6 +245,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 "w-full bg-transparent border-none text-md text-black outline-none p-2.5 pb-1",
                 "placeholder:text-black/40 placeholder:text-sm placeholder:font-medium",
                 autoResize && "overflow-hidden",
+                styles?.input,
                 inputClassName,
               )}
             />
@@ -223,13 +254,23 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             {showCount !== "none" && (
               <div className="flex justify-end gap-3 px-4 pb-2 select-none pointer-events-none">
                 {(showCount === "characters" || showCount === "both") && (
-                  <span className="text-[10px] font-semibold text-black/40 uppercase">
+                  <span
+                    className={cn(
+                      "text-[10px] font-semibold text-black/40 uppercase",
+                      styles?.count,
+                    )}
+                  >
                     {charCount}
                     {props.maxLength ? ` / ${props.maxLength}` : ""} CHR
                   </span>
                 )}
                 {(showCount === "words" || showCount === "both") && (
-                  <span className="text-[10px] font-semibold text-black/40 uppercase">
+                  <span
+                    className={cn(
+                      "text-[10px] font-semibold text-black/40 uppercase",
+                      styles?.count,
+                    )}
+                  >
                     {wordCount}
                     {maxWordLimit ? ` / ${maxWordLimit}` : ""} WRD
                   </span>

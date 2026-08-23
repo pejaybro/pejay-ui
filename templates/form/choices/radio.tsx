@@ -7,11 +7,24 @@ import { cn } from "@/pejay-ui/utils/cn";
  * ============================================================================
  */
 
+export interface RadioStyles {
+  /** Decorative classes for the label */
+  label?: string;
+  /** Decorative classes for the description */
+  description?: string;
+  /** Decorative classes for the outer radio circle border/container */
+  box?: string;
+  /** Decorative classes for the inner selected dot */
+  dot?: string;
+}
+
 /* Prop configuration for the Radio button component */
 export interface RadioProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "type"
 > {
+  /** Optional custom styles object for decorative overrides */
+  styles?: RadioStyles;
   /* Title label of the radio option */
   label?: string;
   /* Help or descriptive text for the radio option */
@@ -44,6 +57,7 @@ export const Radio = ({
   "labelAlign-Y": labelAlignY = "middle",
   className,
   id,
+  styles,
   ...props
 }: RadioProps) => {
   const radioId = id || React.useId();
@@ -103,7 +117,8 @@ export const Radio = ({
             className={cn(
               "w-5 h-5 rounded-full border-[1.5px] border-black flex items-center justify-center bg-white",
               checked && "scale-110",
-              "peer-focus-visible:ring-4 peer-focus-visible:ring-sky-500/10 peer-focus-visible:border-sky-500"
+              "peer-focus-visible:ring-4 peer-focus-visible:ring-sky-500/10 peer-focus-visible:border-sky-500",
+              styles?.box,
             )}
           >
             {/* Inner selected dot */}
@@ -111,6 +126,7 @@ export const Radio = ({
               className={cn(
                 "w-2.5 h-2.5 rounded-full bg-black",
                 checked ? "opacity-100 scale-100" : "opacity-0 scale-100",
+                styles?.dot,
               )}
             />
           </div>
@@ -128,7 +144,12 @@ export const Radio = ({
             )}
           >
             {label && (
-              <span className="whitespace-normal break-words w-full text-sm font-medium text-black">
+              <span
+                className={cn(
+                  "whitespace-normal break-words w-full text-sm font-medium text-black",
+                  styles?.label,
+                )}
+              >
                 {label}
                 {props.required && (
                   <span className="ml-1 font-black text-red-500">
@@ -138,7 +159,12 @@ export const Radio = ({
               </span>
             )}
             {description && (
-              <span className="leading-tight whitespace-normal break-words w-full text-xs text-black">
+              <span
+                className={cn(
+                  "text-xs text-black leading-tight whitespace-normal break-words w-full",
+                  styles?.description,
+                )}
+              >
                 {description}
               </span>
             )}

@@ -68,7 +68,22 @@ type DynamicPresetId =
  */
 type PresetId = StaticPresetId | DynamicPresetId | string;
 
+export interface DateRangePickerStyles {
+  /** Decorative classes for the input/trigger box container */
+  inputBox?: string;
+  /** Decorative classes for the inner input or selected text */
+  input?: string;
+  /** Decorative classes for the main label */
+  label?: string;
+  /** Decorative classes for the secondary description helper text */
+  description?: string;
+  /** Decorative classes for icons */
+  icon?: string;
+}
+
 interface DateRangePickerProps {
+  /** Optional custom styles object for decorative overrides */
+  styles?: DateRangePickerStyles;
   label?: string;
   description?: string;
   error?: string;
@@ -114,6 +129,7 @@ export const DateRangePicker = ({
   "labelAlign-X": labelAlignX,
   "labelAlign-Y": labelAlignY = "middle",
   className,
+  styles,
 }: DateRangePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [range, setRange] = useState<DateRange>(
@@ -711,9 +727,21 @@ export const DateRangePicker = ({
               xAlignment === "center" && "items-center text-center",
             )}
           >
-            <span className="text-sm font-medium text-black">{label}</span>
+            <span
+              className={cn(
+                "text-sm font-medium text-black",
+                styles?.label,
+              )}
+            >
+              {label}
+            </span>
             {description && (
-              <span className="text-[11px] text-black font-medium mt-0.5">
+              <span
+                className={cn(
+                  "text-[11px] text-black font-medium mt-0.5",
+                  styles?.description,
+                )}
+              >
                 {description}
               </span>
             )}
@@ -740,6 +768,8 @@ export const DateRangePicker = ({
                   ? "border-sky-500 ring-4 ring-sky-500/10 shadow-lg"
                   : "hover:border-gray-800",
                 error && "border-red-500 ring-4 ring-red-500/10 text-red-500",
+                styles?.inputBox,
+                styles?.input,
               )}
             />
             <CalendarIcon
@@ -747,6 +777,7 @@ export const DateRangePicker = ({
               className={cn(
                 "absolute left-3 transition-colors",
                 error ? "text-red-500" : "text-black",
+                styles?.icon,
               )}
             />
           </div>
@@ -764,15 +795,20 @@ export const DateRangePicker = ({
                 ? "border-sky-500 ring-4 ring-sky-500/10"
                 : "hover:border-gray-800",
               error && "border-red-500 ring-4 ring-red-500/10",
+              styles?.inputBox,
             )}
           >
             <div className="flex items-center pl-2.25 pr-2 shrink-0">
-              <CalendarIcon size={16} className="text-black" />
+              <CalendarIcon
+                size={16}
+                className={cn("text-black", styles?.icon)}
+              />
             </div>
             <span
               className={cn(
                 "text-md flex-1 text-left truncate text-black",
                 !range.from && !defaultToToday && "text-gray-400",
+                styles?.input,
               )}
             >
               {range.from ? getDisplayText() : placeholder || ""}
@@ -782,6 +818,7 @@ export const DateRangePicker = ({
               className={cn(
                 "text-black transition-transform duration-200",
                 isOpen && "rotate-180",
+                styles?.icon,
               )}
             />
           </button>

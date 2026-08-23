@@ -1,7 +1,22 @@
 import React from "react";
 import { cn } from "@/pejay-ui/utils/cn";
 
+export interface RangeSliderStyles {
+  /** Decorative classes for the label */
+  label?: string;
+  /** Decorative classes for the description */
+  description?: string;
+  /** Decorative classes for the value indicator */
+  value?: string;
+  /** Decorative classes for the idle track background */
+  track?: string;
+  /** Decorative classes for the active filled track */
+  activeTrack?: string;
+}
+
 interface RangeSliderProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  /** Optional custom styles object for decorative overrides */
+  styles?: RangeSliderStyles;
   /* Title label of the range slider */
   label?: string;
   /* Help or descriptive text for the slider */
@@ -43,6 +58,7 @@ export const RangeSlider = ({
   onChange,
   className,
   id,
+  styles,
   ...props
 }: RangeSliderProps) => {
   const sliderId = id || React.useId();
@@ -97,12 +113,20 @@ export const RangeSlider = ({
             <div className="flex justify-between items-center w-full gap-4">
               <label
                 htmlFor={sliderId}
-                className="text-sm font-medium text-black cursor-pointer select-none whitespace-normal wrap-break-word"
+                className={cn(
+                  "text-sm font-medium text-black cursor-pointer select-none whitespace-normal wrap-break-word",
+                  styles?.label,
+                )}
               >
                 {label}
               </label>
               {showValue && !isSideLabel && (
-                <span className="text-sm font-bold tabular-nums text-black shrink-0 leading-none">
+                <span
+                  className={cn(
+                    "text-sm font-bold tabular-nums text-black shrink-0 leading-none",
+                    styles?.value,
+                  )}
+                >
                   {resolvedValue}{valueSuffix}
                 </span>
               )}
@@ -110,7 +134,12 @@ export const RangeSlider = ({
             
             {/* Row 2: Description */}
             {description && (
-              <span className="text-xs text-black leading-tight whitespace-normal wrap-break-word w-full">
+              <span
+                className={cn(
+                  "text-xs text-black leading-tight whitespace-normal wrap-break-word w-full",
+                  styles?.description,
+                )}
+              >
                 {description}
               </span>
             )}
@@ -121,15 +150,28 @@ export const RangeSlider = ({
       {/* Row 3: Slider */}
       <div className="flex-1 flex items-center gap-4">
         {showValue && isSideLabel && labelDirection.startsWith("label-left") && (
-          <span className="text-sm font-semibold tabular-nums text-black shrink-0 min-w-[3ch] text-right">
+          <span
+            className={cn(
+              "text-sm font-semibold tabular-nums text-black shrink-0 min-w-[3ch] text-right",
+              styles?.value,
+            )}
+          >
             {resolvedValue}{valueSuffix}
           </span>
         )}
 
         <div className="relative flex-1 flex items-center h-6 group">
-          <div className="absolute w-full h-[6px] bg-black/20 rounded-full overflow-hidden">
+          <div
+            className={cn(
+              "absolute w-full h-[6px] bg-black/20 rounded-full overflow-hidden",
+              styles?.track,
+            )}
+          >
             <div 
-              className="h-full bg-black transition-all duration-100 ease-out"
+              className={cn(
+                "h-full bg-black transition-all duration-100 ease-out",
+                styles?.activeTrack,
+              )}
               style={{ width: `${percentage}%` }}
             />
           </div>
@@ -153,7 +195,12 @@ export const RangeSlider = ({
         </div>
 
         {showValue && isSideLabel && labelDirection.startsWith("label-right") && (
-          <span className="text-sm font-semibold tabular-nums text-black shrink-0 min-w-[3ch] text-left">
+          <span
+            className={cn(
+              "text-sm font-semibold tabular-nums text-black shrink-0 min-w-[3ch] text-left",
+              styles?.value,
+            )}
+          >
             {resolvedValue}{valueSuffix}
           </span>
         )}

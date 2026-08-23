@@ -1,7 +1,20 @@
 import React from "react";
 import { cn } from "@/pejay-ui/utils/cn";
 
+export interface SwitchStyles {
+  /** Decorative classes for the label */
+  label?: string;
+  /** Decorative classes for the description */
+  description?: string;
+  /** Decorative classes for the track pill container */
+  track?: string;
+  /** Decorative classes for the sliding thumb circle */
+  thumb?: string;
+}
+
 interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "onChange"> {
+  /** Optional custom styles object for decorative overrides */
+  styles?: SwitchStyles;
   /* Title label of the switch toggle */
   label?: string;
   /* Help or descriptive text for the switch */
@@ -31,6 +44,7 @@ export const Switch = ({
   onChange,
   className,
   id,
+  styles,
   ...props
 }: SwitchProps) => {
   const switchId = id || React.useId();
@@ -74,19 +88,40 @@ export const Switch = ({
           <div className={cn(
             "w-[44px] h-[24px] rounded-full transition-all duration-200 ease-in-out border-[1.5px] border-black relative",
             checked ? "bg-black" : "bg-black/10",
-            "peer-focus-visible:ring-4 peer-focus-visible:ring-sky-500/10 peer-focus-visible:border-sky-500"
+            "peer-focus-visible:ring-4 peer-focus-visible:ring-sky-500/10 peer-focus-visible:border-sky-500",
+            styles?.track,
           )}>
             <div className={cn(
               "w-4 h-4 rounded-full transition-all duration-200 ease-in-out absolute top-[2.5px] left-[3.5px]",
-              checked ? "bg-white translate-x-[18px]" : "bg-black translate-x-0"
+              checked ? "bg-white translate-x-[18px]" : "bg-black translate-x-0",
+              styles?.thumb,
             )} />
           </div>
         </div>
 
         {(label || description) && (
           <div className={cn("flex flex-col gap-0.5 min-w-0", isSideLabel ? (labelWidth || "flex-1") : "w-full", xAlignment === "left" && "items-start text-left", xAlignment === "right" && "items-end text-right", xAlignment === "center" && "items-center text-center")}>
-            {label && <span className="text-sm font-medium text-black whitespace-normal break-words w-full">{label}{props.required && <span className="text-red-500 ml-1 font-black">*</span>}</span>}
-            {description && <span className="text-xs text-black leading-tight whitespace-normal break-words w-full">{description}</span>}
+            {label && (
+              <span
+                className={cn(
+                  "text-sm font-medium text-black whitespace-normal break-words w-full",
+                  styles?.label,
+                )}
+              >
+                {label}
+                {props.required && <span className="text-red-500 ml-1 font-black">*</span>}
+              </span>
+            )}
+            {description && (
+              <span
+                className={cn(
+                  "text-xs text-black leading-tight whitespace-normal break-words w-full",
+                  styles?.description,
+                )}
+              >
+                {description}
+              </span>
+            )}
           </div>
         )}
       </label>

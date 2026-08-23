@@ -28,7 +28,22 @@ import {
   FloatingFocusManager,
 } from "@floating-ui/react";
 
+export interface DatePickerStyles {
+  /** Decorative classes for the input/trigger box container */
+  inputBox?: string;
+  /** Decorative classes for the inner input or selected text */
+  input?: string;
+  /** Decorative classes for the main label */
+  label?: string;
+  /** Decorative classes for the secondary description helper text */
+  description?: string;
+  /** Decorative classes for icons */
+  icon?: string;
+}
+
 interface DatePickerProps {
+  /** Optional custom styles object for decorative overrides */
+  styles?: DatePickerStyles;
   label?: string;
   description?: string;
   error?: string;
@@ -72,6 +87,7 @@ export const DatePicker = ({
   "labelAlign-X": labelAlignX,
   "labelAlign-Y": labelAlignY = "middle",
   className,
+  styles,
 }: DatePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [viewDate, setViewDate] = useState<Date>(value || new Date());
@@ -460,11 +476,21 @@ export const DatePicker = ({
               xAlignment === "center" && "items-center text-center",
             )}
           >
-            <span className="text-sm font-medium text-black">
+            <span
+              className={cn(
+                "text-sm font-medium text-black",
+                styles?.label,
+              )}
+            >
               {label}
             </span>
             {description && (
-              <span className="text-[11px] text-black font-medium mt-0.5">
+              <span
+                className={cn(
+                  "text-[11px] text-black font-medium mt-0.5",
+                  styles?.description,
+                )}
+              >
                 {description}
               </span>
             )}
@@ -492,6 +518,8 @@ export const DatePicker = ({
                   : "hover:border-gray-800",
                 hasError &&
                   "border-red-500 ring-4 ring-red-500/10 text-red-500",
+                styles?.inputBox,
+                styles?.input,
               )}
             />
             <CalendarIcon
@@ -499,6 +527,7 @@ export const DatePicker = ({
               className={cn(
                 "absolute left-3 transition-colors",
                 hasError ? "text-red-500" : "text-black",
+                styles?.icon,
               )}
             />
           </div>
@@ -514,13 +543,20 @@ export const DatePicker = ({
               borderRadius,
               isOpen && "border-sky-500 ring-4 ring-sky-500/10",
               errorProp && "border-red-500 ring-4 ring-red-500/10",
+              styles?.inputBox,
             )}
           >
             <div className="flex items-center pl-2.25 pr-2 shrink-0">
-              <CalendarIcon size={16} className="text-black" />
+              <CalendarIcon
+                size={16}
+                className={cn("text-black", styles?.icon)}
+              />
             </div>
             <span
-              className={cn("text-md flex-1 text-left truncate text-black")}
+              className={cn(
+                "text-md flex-1 text-left truncate text-black",
+                styles?.input,
+              )}
             >
               {getDisplayText()}
             </span>
@@ -529,6 +565,7 @@ export const DatePicker = ({
               className={cn(
                 "text-black transition-transform duration-200",
                 isOpen && "rotate-180",
+                styles?.icon,
               )}
             />
           </button>

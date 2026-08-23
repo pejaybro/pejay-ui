@@ -8,7 +8,7 @@ import { Mail, CheckCircle2, AlertCircle } from "lucide-react";
  * ============================================================================
  */
 
-interface EmailInputProps extends React.ComponentProps<typeof Input> {
+export interface EmailInputProps extends React.ComponentProps<typeof Input> {
   /* Controls visibility of validation indicator icons (Check/Alert) */
   showValidationIcon?: boolean;
   /* Represents the validity status calculated by the parent form state */

@@ -24,6 +24,8 @@ interface FileInputProps extends Omit<
   dropzoneVariant?: "rectangle" | "square" | "narrow";
   /* Maximum allowed file size limit (in MB) */
   maxFileSize?: number;
+  /** Optional custom styles passed down to underlying Input component */
+  styles?: React.ComponentProps<typeof Input>["styles"];
 }
 
 /*
@@ -41,6 +43,7 @@ export const FileInput = ({
   className,
   onChange,
   accept,
+  styles,
   ...props
 }: FileInputProps) => {
   /* Tracks the currently selected File object */
@@ -164,6 +167,7 @@ export const FileInput = ({
             value={file ? file.name : ""}
             onClick={triggerInput}
             leftIcon={<Upload size={18} />}
+            styles={styles}
             rightIcon={
               file && (
                 <button

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Input } from "./input";
 import { Link, CheckCircle2, AlertCircle } from "lucide-react";
 
-interface URLInputProps extends React.ComponentProps<typeof Input> {
+export interface URLInputProps extends React.ComponentProps<typeof Input> {
   showValidationIcon?: boolean;
 }
 

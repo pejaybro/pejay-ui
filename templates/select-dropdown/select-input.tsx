@@ -40,7 +40,20 @@ function getNextSelectableIndex(
   return currentIndex;
 }
 
+export interface SelectInputStyles {
+  /** Decorative classes for the trigger box container */
+  inputBox?: string;
+  /** Decorative classes for the inner input or selected text */
+  input?: string;
+  /** Decorative classes for prefix icon */
+  prefixIcon?: string;
+  /** Decorative classes for right icon / chevron */
+  rightIcon?: string;
+}
+
 export interface SelectInputProps {
+  /** Optional custom styles object for decorative overrides */
+  styles?: SelectInputStyles;
   /** Array of option objects: { id, label, key } */
   options: SelectOption[];
   /** Controlled value (key). If undefined, component runs in uncontrolled mode */
@@ -118,8 +131,9 @@ export function SelectInput({
   loading = false,
   showTooltip = false,
   searchable = false,
-  searchPosition = "trigger",
-  error,
+  searchPosition = "dropdown",
+  error = false,
+  styles,
 }: SelectInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -386,11 +400,17 @@ export function SelectInput({
             "border-red-500 focus-within:border-red-500 focus-within:ring-red-500/10",
           (disabled || loading) &&
             "opacity-50 pointer-events-none cursor-not-allowed border-gray-300",
+          styles?.inputBox,
         )}
       >
         {/* Left Prefix Icon Area */}
         {prefixIcon && (
-          <div className="flex items-center pl-3 text-black shrink-0 h-full">
+          <div
+            className={cn(
+              "flex items-center pl-3 text-black shrink-0 h-full",
+              styles?.prefixIcon,
+            )}
+          >
             {prefixIcon}
           </div>
         )}
@@ -406,7 +426,10 @@ export function SelectInput({
             <input
               ref={inputRef}
               type="text"
-              className="w-full bg-transparent border-none text-black placeholder:text-gray-400 outline-none text-left p-0 text-sm font-medium"
+              className={cn(
+                "w-full bg-transparent border-none text-black placeholder:text-gray-400 outline-none text-left p-0 text-sm font-medium",
+                styles?.input,
+              )}
               placeholder={
                 selectedOption
                   ? selectedOption.label
@@ -436,7 +459,12 @@ export function SelectInput({
               content={selectedOption?.label || ""}
               enabled={showTooltip && !!selectedOption}
             >
-              <span className="truncate text-black flex-1 text-left min-w-0 font-medium">
+              <span
+                className={cn(
+                  "truncate text-black flex-1 text-left min-w-0 font-medium",
+                  styles?.input,
+                )}
+              >
                 {selectedOption
                   ? selectedOption.label
                   : options.length === 0
@@ -448,7 +476,12 @@ export function SelectInput({
         </div>
 
         {/* Right Caret Icon Area */}
-        <div className="flex items-center pr-3 pl-1 text-black shrink-0 h-full">
+        <div
+          className={cn(
+            "flex items-center pr-3 pl-1 text-black shrink-0 h-full",
+            styles?.rightIcon,
+          )}
+        >
           {loading ? (
             <Loader2 size={16} className="animate-spin text-sky-500" />
           ) : (

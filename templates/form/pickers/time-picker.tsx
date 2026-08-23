@@ -16,7 +16,22 @@ import {
   FloatingFocusManager,
 } from "@floating-ui/react";
 
+export interface TimePickerStyles {
+  /** Decorative classes for the input/trigger box container */
+  inputBox?: string;
+  /** Decorative classes for the inner input or selected text */
+  input?: string;
+  /** Decorative classes for the main label */
+  label?: string;
+  /** Decorative classes for the secondary description helper text */
+  description?: string;
+  /** Decorative classes for icons */
+  icon?: string;
+}
+
 interface TimePickerProps {
+  /** Optional custom styles object for decorative overrides */
+  styles?: TimePickerStyles;
   label?: string;
   description?: string;
   error?: string;
@@ -50,6 +65,7 @@ export const TimePicker = ({
   "labelAlign-X": labelAlignX,
   "labelAlign-Y": labelAlignY = "middle",
   className,
+  styles,
 }: TimePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -292,8 +308,24 @@ export const TimePicker = ({
             xAlignment === "right" && "items-end text-right", 
             xAlignment === "center" && "items-center text-center"
           )}>
-            <span className="text-sm font-medium text-black">{label}</span>
-            {description && <span className="text-[11px] text-black font-medium mt-0.5">{description}</span>}
+            <span
+              className={cn(
+                "text-sm font-medium text-black",
+                styles?.label,
+              )}
+            >
+              {label}
+            </span>
+            {description && (
+              <span
+                className={cn(
+                  "text-[11px] text-black font-medium mt-0.5",
+                  styles?.description,
+                )}
+              >
+                {description}
+              </span>
+            )}
           </div>
         </div>
       )}
@@ -314,10 +346,19 @@ export const TimePicker = ({
                 "flex items-center w-full pl-10 pr-2 h-9 border-[1.5px] border-black transition-all duration-200 bg-white text-md text-black outline-none placeholder:text-black/40 placeholder:text-sm placeholder:font-medium font-medium",
                 borderRadius,
                 isFocused ? "border-sky-500 ring-4 ring-sky-500/10 shadow-lg" : "hover:border-gray-800",
-                hasError && "border-red-500 ring-4 ring-red-500/10 text-red-500"
+                hasError && "border-red-500 ring-4 ring-red-500/10 text-red-500",
+                styles?.inputBox,
+                styles?.input,
               )}
             />
-            <Clock size={16} className={cn("absolute left-3 transition-colors", hasError ? "text-red-500" : "text-black")} />
+            <Clock
+              size={16}
+              className={cn(
+                "absolute left-3 transition-colors",
+                hasError ? "text-red-500" : "text-black",
+                styles?.icon,
+              )}
+            />
           </div>
         ) : (
           <button
@@ -330,16 +371,33 @@ export const TimePicker = ({
               "flex items-center pr-2 w-full h-9 border-[1.5px] border-black transition-all duration-200 bg-white font-medium text-black cursor-pointer",
               borderRadius,
               isOpen ? "border-sky-500 ring-4 ring-sky-500/10" : "hover:border-gray-800",
-              errorProp && "border-red-500 ring-4 ring-red-500/10"
+              errorProp && "border-red-500 ring-4 ring-red-500/10",
+              styles?.inputBox,
             )}
           >
             <div className="flex items-center pl-2.25 pr-2 shrink-0">
-              <Clock size={16} className="text-black" />
+              <Clock
+                size={16}
+                className={cn("text-black", styles?.icon)}
+              />
             </div>
-            <span className={cn("text-md flex-1 text-left truncate text-black", !value && "text-gray-400")}>
+            <span
+              className={cn(
+                "text-md flex-1 text-left truncate text-black",
+                !value && "text-gray-400",
+                styles?.input,
+              )}
+            >
               {value ? format(value, displayFormat) : (placeholder || "Select Time")}
             </span>
-            <ChevronDown size={14} className={cn("text-black transition-transform duration-200", isOpen && "rotate-180")} />
+            <ChevronDown
+              size={14}
+              className={cn(
+                "text-black transition-transform duration-200",
+                isOpen && "rotate-180",
+                styles?.icon,
+              )}
+            />
           </button>
         )}
 

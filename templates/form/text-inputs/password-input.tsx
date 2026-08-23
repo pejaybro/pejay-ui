@@ -9,7 +9,7 @@ import { cn } from "@/pejay-ui/utils/cn";
  * ============================================================================
  */
 
-interface PasswordInputProps extends React.ComponentProps<typeof Input> {
+export interface PasswordInputProps extends React.ComponentProps<typeof Input> {
   /* Controls visibility of the toggle password visibility button */
   showToggle?: boolean;
   /* Displays a warning banner when Caps Lock is toggled on */
@@ -129,15 +129,9 @@ export const PasswordInput = ({
         rightIcon={
           showToggle ? (
             isVisible ? (
-              <EyeOff
-                size={18}
-                className="text-black"
-              />
+              <EyeOff size={18} />
             ) : (
-              <Eye
-                size={18}
-                className="text-black"
-              />
+              <Eye size={18} />
             )
           ) : (
             props.rightIcon

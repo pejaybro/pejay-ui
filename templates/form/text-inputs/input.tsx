@@ -6,10 +6,33 @@ import { cn } from "@/pejay-ui/utils/cn";
  * Types & Interfaces
  * ============================================================================
  */
+export interface InputStyles {
+  /** Decorative classes for the input box container (e.g. bg color, border color, focus rings) */
+  inputBox?: string;
+  /** Decorative classes for the inner input text, font, and placeholder */
+  input?: string;
+  /** Decorative classes for the main label */
+  label?: string;
+  /** Decorative classes for the secondary description helper text */
+  description?: string;
+  /** Decorative classes for the left-side icon */
+  leftIcon?: string;
+  /** Decorative classes for the right-side icon */
+  rightIcon?: string;
+  /** Decorative classes for the static prefix text */
+  prefix?: string;
+  /** Decorative classes for the static suffix text */
+  suffix?: string;
+  /** Fallback shorthand decorative classes for both left and right icons */
+  icon?: string;
+}
+
 export interface InputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "prefix"
 > {
+  /** Optional custom styles object for decorative overrides (input box, label, description, icons, prefix, suffix) */
+  styles?: InputStyles;
   /** Optional main text label displayed above or next to the input */
   label?: string;
   /** Optional secondary text helper details shown underneath the label */
@@ -57,6 +80,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       labelWidth = "w-32",
       "labelAlign-X": labelAlignX,
       "labelAlign-Y": labelAlignY = "middle",
+      styles,
       ...props
     },
     ref,
@@ -146,9 +170,21 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 xAlignment === "center" && "items-center text-center",
               )}
             >
-              <span className="text-md font-medium text-black">{label}</span>
+              <span
+                className={cn(
+                  "text-md font-medium text-black",
+                  styles?.label,
+                )}
+              >
+                {label}
+              </span>
               {description && (
-                <span className="text-xs text-black font-medium mt-0.5">
+                <span
+                  className={cn(
+                    "text-xs font-medium text-black mt-0.5",
+                    styles?.description,
+                  )}
+                >
                   {description}
                 </span>
               )}
@@ -164,6 +200,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               "flex items-center transition-all duration-200 gap-0",
               "rounded-lg w-full border-[1.5px] bg-white border-black h-9",
               "focus-within:border-sky-500 focus-within:ring-4 focus-within:ring-sky-500/10",
+              styles?.inputBox,
               error
                 ? "border-red-600 focus-within:border-red-600 focus-within:ring-red-600/10"
                 : "",
@@ -172,14 +209,28 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           >
             {/* Left Content Decorators (Icon / Prefix) */}
             {(leftIcon || prefix) && (
-              <div
-                className={cn(
-                  "flex items-center pl-2 pr-2 shrink-0 gap-1.5",
-                  "text-black",
+              <div className="flex items-center pl-2 pr-2 shrink-0 gap-1.5">
+                {leftIcon && (
+                  <span
+                    className={cn(
+                      "text-black inline-flex items-center",
+                      styles?.icon,
+                      styles?.leftIcon,
+                    )}
+                  >
+                    {leftIcon}
+                  </span>
                 )}
-              >
-                {leftIcon}
-                {prefix && <span className="font-medium">{prefix}</span>}
+                {prefix && (
+                  <span
+                    className={cn(
+                      "font-medium text-black",
+                      styles?.prefix,
+                    )}
+                  >
+                    {prefix}
+                  </span>
+                )}
               </div>
             )}
 
@@ -205,6 +256,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 "flex-1 w-full min-w-0 bg-transparent border-none outline-none h-full py-1.5 truncate",
                 "text-md font-medium text-black",
                 "placeholder:text-black/40 placeholder:text-sm placeholder:font-medium placeholder:truncate",
+                styles?.input,
                 !(leftIcon || prefix) && "pl-2",
                 !(rightIcon || suffix) && "pr-2",
                 props.readOnly && "cursor-pointer",
@@ -213,18 +265,24 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
             {/* Right Content Decorators (Suffix / Interactive Right Action Icon) */}
             {(rightIcon || suffix) && (
-              <div
-                className={cn(
-                  "flex items-center pr-2.25 pl-2 shrink-0",
-                  "text-black",
+              <div className="flex items-center pr-2.25 pl-2 shrink-0 gap-1.5">
+                {suffix && (
+                  <span
+                    className={cn(
+                      "font-medium text-black",
+                      styles?.suffix,
+                    )}
+                  >
+                    {suffix}
+                  </span>
                 )}
-              >
-                {suffix && <span className="font-medium">{suffix}</span>}
                 {rightIcon && (
                   <div
                     onClick={onRightIconClick}
                     className={cn(
-                      "transition-colors group-focus-within:text-white",
+                      "transition-colors text-black inline-flex items-center",
+                      styles?.icon,
+                      styles?.rightIcon,
                       onRightIconClick && "cursor-pointer",
                     )}
                   >

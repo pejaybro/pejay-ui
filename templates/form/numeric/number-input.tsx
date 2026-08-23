@@ -9,7 +9,7 @@ import { cn } from "@/pejay-ui/utils/cn";
  * ============================================================================
  */
 
-interface NumberInputProps extends React.ComponentProps<typeof Input> {
+export interface NumberInputProps extends React.ComponentProps<typeof Input> {
   /* Controls visibility of right-side increment/decrement steppers */
   showSteppers?: boolean;
   /* Value delta to apply when stepping up or down */

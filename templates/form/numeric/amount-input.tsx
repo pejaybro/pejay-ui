@@ -9,7 +9,7 @@ import { cn } from "@/pejay-ui/utils/cn";
  * ============================================================================
  */
 
-interface AmountInputProps extends React.ComponentProps<typeof Input> {
+export interface AmountInputProps extends React.ComponentProps<typeof Input> {
   /* Minimum value constraint */
   min?: string | number;
   /* Maximum value constraint */
