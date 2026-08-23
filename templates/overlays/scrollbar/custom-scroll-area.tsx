@@ -2,32 +2,47 @@
  * ============================================================================
  * CUSTOM SCROLL AREA — Reusable React & Tailwind Component
  * ============================================================================
- * 
+ *
+ * Provides smooth lerp-momentum scrolling and auto-vanishing floating
+ * scrollbars for BOTH vertical and horizontal axes. Bars appear on scroll
+ * or mouse-move and fade out automatically when idle.
+ *
  * HOW TO USE THIS COMPONENT IN ANY REACT + TAILWIND PROJECT:
- * 
+ *
  * 1. Copy this file into your project (e.g., `src/pejay-ui/components/custom-scroll-area.tsx`).
  * 2. Add native scrollbar suppression in your CSS (see readme.scrollbar.md).
  * 3. Import and wrap any overflow content:
- * 
+ *
  *    import { CustomScrollArea } from "@/src/pejay-ui/components";
- * 
+ *
  *    function MyPage() {
  *      return (
- *        <CustomScrollArea className="h-96 w-full p-4">
+ *        <CustomScrollArea>
  *          <p>Your long scrollable content here...</p>
  *        </CustomScrollArea>
  *      );
  *    }
- * 
- * 4. Customizing Settings via Props:
- *    <CustomScrollArea 
- *      hideDelay={2000}          // Idle time (ms) before fade-out (Default: 1800ms)
- *      thumbWidth="w-2"          // Tailwind width class for thumb (Default: "w-1.5")
- *      thumbColor="bg-purple-500" // Tailwind color class (Default: "bg-chalk-40")
- *      smoothWheel={true}        // Enable smooth lerp momentum scrolling (Default: true)
+ *
+ * 4. All available props:
+ *
+ *    <CustomScrollArea
+ *      hideDelay={2000}           // Idle time (ms) before scrollbar fades out  (Default: 1800ms)
+ *      fadeDurationMs={500}       // Fade-out transition duration in ms          (Default: 700ms)
+ *      thumbWidth="w-2"           // Tailwind class — vertical thumb thickness   (Default: "w-1.5")
+ *      thumbHoverWidth="w-2.5"    // Vertical thumb thickness on hover/drag      (Default: "w-2")
+ *      thumbColor="bg-zinc-500"   // Idle thumb color (Tailwind class)           (Default: "bg-chalk-40")
+ *      thumbHoverColor="bg-white" // Thumb color on hover/drag                   (Default: "bg-chalk-70")
+ *      smoothWheel={true}         // Enable smooth lerp momentum scrolling       (Default: true)
  *    >
  *      {content}
  *    </CustomScrollArea>
+ *
+ * 5. Scrolling behaviour:
+ *    - Mouse wheel (deltaY)          → vertical scroll
+ *    - Trackpad two-finger swipe (deltaX) → horizontal scroll
+ *    - Shift + Mouse wheel           → horizontal scroll
+ *    - Both scrollbars are draggable; corner gap is applied automatically
+ *      when both axes are simultaneously scrollable.
  * ============================================================================
  */
 
@@ -36,7 +51,6 @@ import { cn } from "@/pejay-ui/utils/cn";
 
 export interface CustomScrollAreaProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: string;
   hideDelay?: number;         // Delay (ms) before auto-hiding when idle
   fadeDurationMs?: number;    // Fade transition duration (ms)
   thumbWidth?: string;        // Default thumb width Tailwind class
@@ -48,7 +62,6 @@ export interface CustomScrollAreaProps extends React.HTMLAttributes<HTMLDivEleme
 
 export const CustomScrollArea = ({
   children,
-  className,
   hideDelay = 1800,
   fadeDurationMs = 700,
   thumbWidth = "w-1.5",
@@ -62,16 +75,31 @@ export const CustomScrollArea = ({
    * State & Refs
    * ========================================================================== */
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // ── Vertical smooth-scroll state ──────────────────────────────────────────
   const targetScrollTop = useRef(0);
-  const isAnimatingScroll = useRef(false);
+  const isAnimatingScrollY = useRef(false);
 
   const [thumbHeight, setThumbHeight] = useState(0);
-  const [thumbTop, setThumbTop] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isThumbHovered, setIsThumbHovered] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+  const [thumbTop, setThumbTop]       = useState(0);
+
+  // ── Horizontal smooth-scroll state ────────────────────────────────────────
+  const targetScrollLeft = useRef(0);
+  const isAnimatingScrollX = useRef(false);
+
+  const [thumbWidthH, setThumbWidthH] = useState(0);   // horizontal thumb pixel width
+  const [thumbLeft, setThumbLeft]     = useState(0);
+
+  // ── Shared UI state ────────────────────────────────────────────────────────
+  const [isVisible, setIsVisible]             = useState(false);
+  const [isThumbHoveredV, setIsThumbHoveredV] = useState(false);
+  const [isDraggingV, setIsDraggingV]         = useState(false);
+  const [isThumbHoveredH, setIsThumbHoveredH] = useState(false);
+  const [isDraggingH, setIsDraggingH]         = useState(false);
 
   const hideTimeoutRef = useRef<number | null>(null);
+
+  const isInteracting = isThumbHoveredV || isDraggingV || isThumbHoveredH || isDraggingH;
 
   /* ==========================================================================
    * [1] Scroll Position & Thumb Calculations (Instant 1:1 sync)
@@ -80,28 +108,45 @@ export const CustomScrollArea = ({
     const el = containerRef.current;
     if (!el) return;
 
-    const { scrollTop, scrollHeight, clientHeight } = el;
+    const { scrollTop, scrollHeight, clientHeight, scrollLeft, scrollWidth, clientWidth } = el;
+
+    // ── Vertical thumb ──────────────────────────────────────────────────────
     if (scrollHeight <= clientHeight + 1) {
       setThumbHeight(0);
-      return;
+    } else {
+      const trackPadding        = 12; // top-1.5 (6px) + bottom-1.5 (6px)
+      const availableTrackHeight = Math.max(0, clientHeight - trackPadding);
+      const minThumbHeight      = 32;
+      const calcHeight = Math.max(
+        (clientHeight / scrollHeight) * availableTrackHeight,
+        minThumbHeight
+      );
+      const maxScrollTop = scrollHeight - clientHeight;
+      const maxThumbTop  = availableTrackHeight - calcHeight;
+      const calcTop = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
+
+      setThumbHeight(calcHeight);
+      setThumbTop(calcTop);
     }
 
-    // Inset track padding: top-1.5 (6px) + bottom-1.5 (6px) = 12px total
-    const trackPadding = 12;
-    const availableTrackHeight = Math.max(0, clientHeight - trackPadding);
+    // ── Horizontal thumb ────────────────────────────────────────────────────
+    if (scrollWidth <= clientWidth + 1) {
+      setThumbWidthH(0);
+    } else {
+      const trackPadding        = 12; // left-1.5 + right-1.5
+      const availableTrackWidth = Math.max(0, clientWidth - trackPadding);
+      const minThumbWidth       = 32;
+      const calcWidth = Math.max(
+        (clientWidth / scrollWidth) * availableTrackWidth,
+        minThumbWidth
+      );
+      const maxScrollLeft = scrollWidth - clientWidth;
+      const maxThumbLeft  = availableTrackWidth - calcWidth;
+      const calcLeft = maxScrollLeft > 0 ? (scrollLeft / maxScrollLeft) * maxThumbLeft : 0;
 
-    const minThumbHeight = 32;
-    const calculatedHeight = Math.max(
-      (clientHeight / scrollHeight) * availableTrackHeight,
-      minThumbHeight
-    );
-    const maxScrollTop = scrollHeight - clientHeight;
-    const maxThumbTop = availableTrackHeight - calculatedHeight;
-    const calculatedTop =
-      maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
-
-    setThumbHeight(calculatedHeight);
-    setThumbTop(calculatedTop);
+      setThumbWidthH(calcWidth);
+      setThumbLeft(calcLeft);
+    }
   }, []);
 
   /* ==========================================================================
@@ -115,11 +160,11 @@ export const CustomScrollArea = ({
     }
 
     hideTimeoutRef.current = window.setTimeout(() => {
-      if (!isThumbHovered && !isDragging) {
+      if (!isInteracting) {
         setIsVisible(false);
       }
     }, hideDelay);
-  }, [hideDelay, isThumbHovered, isDragging]);
+  }, [hideDelay, isInteracting]);
 
   const handleScroll = () => {
     updateScrollbar();
@@ -137,46 +182,73 @@ export const CustomScrollArea = ({
     const el = containerRef.current;
     if (!el || !smoothWheel) return;
 
-    const animateSmoothScroll = () => {
-      if (!el) {
-        isAnimatingScroll.current = false;
-        return;
-      }
-
+    // ── Vertical lerp ───────────────────────────────────────────────────────
+    const animateSmoothScrollY = () => {
+      if (!el) { isAnimatingScrollY.current = false; return; }
       const diff = targetScrollTop.current - el.scrollTop;
       if (Math.abs(diff) < 0.5) {
         el.scrollTop = targetScrollTop.current;
-        isAnimatingScroll.current = false;
+        isAnimatingScrollY.current = false;
         updateScrollbar();
         return;
       }
-
-      // Smooth Lerp momentum step
       el.scrollTop += diff * 0.18;
       updateScrollbar();
-      requestAnimationFrame(animateSmoothScroll);
+      requestAnimationFrame(animateSmoothScrollY);
+    };
+
+    // ── Horizontal lerp ─────────────────────────────────────────────────────
+    const animateSmoothScrollX = () => {
+      if (!el) { isAnimatingScrollX.current = false; return; }
+      const diff = targetScrollLeft.current - el.scrollLeft;
+      if (Math.abs(diff) < 0.5) {
+        el.scrollLeft = targetScrollLeft.current;
+        isAnimatingScrollX.current = false;
+        updateScrollbar();
+        return;
+      }
+      el.scrollLeft += diff * 0.18;
+      updateScrollbar();
+      requestAnimationFrame(animateSmoothScrollX);
     };
 
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const maxScroll = el.scrollHeight - el.clientHeight;
-      if (maxScroll <= 0) return;
 
-      if (!isAnimatingScroll.current) {
-        targetScrollTop.current = el.scrollTop;
+      const maxScrollY = el.scrollHeight - el.clientHeight;
+      const maxScrollX = el.scrollWidth  - el.clientWidth;
+
+      // ── Vertical (deltaY, no shift) ────────────────────────────────────────
+      if (maxScrollY > 0 && e.deltaY !== 0 && !e.shiftKey) {
+        if (!isAnimatingScrollY.current) targetScrollTop.current = el.scrollTop;
+        targetScrollTop.current = Math.min(maxScrollY, Math.max(0, targetScrollTop.current + e.deltaY));
+        if (!isAnimatingScrollY.current) {
+          isAnimatingScrollY.current = true;
+          requestAnimationFrame(animateSmoothScrollY);
+        }
       }
 
-      targetScrollTop.current = Math.min(
-        maxScroll,
-        Math.max(0, targetScrollTop.current + e.deltaY)
-      );
+      // ── Horizontal (native deltaX, e.g. trackpad two-finger swipe) ─────────
+      if (maxScrollX > 0 && e.deltaX !== 0) {
+        if (!isAnimatingScrollX.current) targetScrollLeft.current = el.scrollLeft;
+        targetScrollLeft.current = Math.min(maxScrollX, Math.max(0, targetScrollLeft.current + e.deltaX));
+        if (!isAnimatingScrollX.current) {
+          isAnimatingScrollX.current = true;
+          requestAnimationFrame(animateSmoothScrollX);
+        }
+      }
+
+      // ── Shift+Wheel → horizontal scroll (common mouse UX pattern) ──────────
+      if (maxScrollX > 0 && e.deltaY !== 0 && e.shiftKey) {
+        if (!isAnimatingScrollX.current) targetScrollLeft.current = el.scrollLeft;
+        targetScrollLeft.current = Math.min(maxScrollX, Math.max(0, targetScrollLeft.current + e.deltaY));
+        if (!isAnimatingScrollX.current) {
+          isAnimatingScrollX.current = true;
+          requestAnimationFrame(animateSmoothScrollX);
+        }
+      }
 
       triggerVisibility();
-
-      if (!isAnimatingScroll.current) {
-        isAnimatingScroll.current = true;
-        requestAnimationFrame(animateSmoothScroll);
-      }
     };
 
     el.addEventListener("wheel", handleWheel, { passive: false });
@@ -214,23 +286,23 @@ export const CustomScrollArea = ({
   }, [updateScrollbar]);
 
   /* ==========================================================================
-   * [4] Zero-Lag 1:1 Direct Mouse Dragging Handler
+   * [4] Zero-Lag 1:1 Direct Mouse Dragging — Vertical
    * ========================================================================== */
-  const handleThumbMouseDown = (e: React.MouseEvent) => {
+  const handleThumbMouseDownV = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     const el = containerRef.current;
     if (!el) return;
 
-    setIsDragging(true);
+    setIsDraggingV(true);
     document.body.style.userSelect = "none";
 
-    const startY = e.clientY;
+    const startY         = e.clientY;
     const startScrollTop = el.scrollTop;
     const { scrollHeight, clientHeight } = el;
-    const maxScrollTop = scrollHeight - clientHeight;
-    const maxThumbTop = clientHeight - thumbHeight;
+    const maxScrollTop   = scrollHeight - clientHeight;
+    const maxThumbTop    = clientHeight - thumbHeight;
 
     const onMouseMove = (moveEvent: MouseEvent) => {
       if (maxThumbTop <= 0) return;
@@ -239,17 +311,57 @@ export const CustomScrollArea = ({
         maxScrollTop,
         Math.max(0, startScrollTop + (deltaY / maxThumbTop) * maxScrollTop)
       );
-
-      // Instant 1:1 direct scroll update
       el.scrollTop = newScrollTop;
       targetScrollTop.current = newScrollTop;
-
       const newThumbTop = (newScrollTop / maxScrollTop) * maxThumbTop;
       setThumbTop(newThumbTop);
     };
 
     const onMouseUp = () => {
-      setIsDragging(false);
+      setIsDraggingV(false);
+      document.body.style.userSelect = "";
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+  };
+
+  /* ==========================================================================
+   * [4H] Zero-Lag 1:1 Direct Mouse Dragging — Horizontal
+   * ========================================================================== */
+  const handleThumbMouseDownH = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const el = containerRef.current;
+    if (!el) return;
+
+    setIsDraggingH(true);
+    document.body.style.userSelect = "none";
+
+    const startX          = e.clientX;
+    const startScrollLeft = el.scrollLeft;
+    const { scrollWidth, clientWidth } = el;
+    const maxScrollLeft   = scrollWidth - clientWidth;
+    const maxThumbLeft    = clientWidth - thumbWidthH;
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      if (maxThumbLeft <= 0) return;
+      const deltaX = moveEvent.clientX - startX;
+      const newScrollLeft = Math.min(
+        maxScrollLeft,
+        Math.max(0, startScrollLeft + (deltaX / maxThumbLeft) * maxScrollLeft)
+      );
+      el.scrollLeft = newScrollLeft;
+      targetScrollLeft.current = newScrollLeft;
+      const newThumbLeft = (newScrollLeft / maxScrollLeft) * maxThumbLeft;
+      setThumbLeft(newThumbLeft);
+    };
+
+    const onMouseUp = () => {
+      setIsDraggingH(false);
       document.body.style.userSelect = "";
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
@@ -262,6 +374,12 @@ export const CustomScrollArea = ({
   /* ==========================================================================
    * [5] Render JSX
    * ========================================================================== */
+  const showScrollbars = isVisible || isInteracting;
+
+  // When both axes are scrollable, offset track ends to avoid the corner overlap
+  const hasV = thumbHeight > 0;
+  const hasH = thumbWidthH > 0;
+
   return (
     <div
       className="relative overflow-hidden w-full h-full"
@@ -271,36 +389,26 @@ export const CustomScrollArea = ({
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className={cn(
-          "w-full h-full overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
-          className,
-        )}
+        className="w-full h-full overflow-auto scrollbar-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         {...props}
       >
         {children}
       </div>
 
-      {/* Custom Floating Track & Thumb */}
-      {thumbHeight > 0 && (
+      {/* ── Vertical Floating Track & Thumb ──────────────────────────────── */}
+      {hasV && (
         <div
-          onMouseEnter={() => {
-            setIsThumbHovered(true);
-            setIsVisible(true);
-          }}
-          onMouseLeave={() => {
-            setIsThumbHovered(false);
-            triggerVisibility();
-          }}
+          onMouseEnter={() => { setIsThumbHoveredV(true); setIsVisible(true); }}
+          onMouseLeave={() => { setIsThumbHoveredV(false); triggerVisibility(); }}
           style={{ transitionDuration: `${fadeDurationMs}ms` }}
           className={cn(
-            "absolute right-1.5 top-1.5 bottom-1.5 w-3 z-50 pointer-events-auto transition-opacity ease-out flex justify-end",
-            isVisible || isThumbHovered || isDragging
-              ? "opacity-100"
-              : "opacity-0",
+            "absolute right-1.5 top-1.5 w-3 z-50 pointer-events-auto transition-opacity ease-out flex justify-end",
+            hasH ? "bottom-4" : "bottom-1.5",
+            showScrollbars ? "opacity-100" : "opacity-0",
           )}
         >
           <div
-            onMouseDown={handleThumbMouseDown}
+            onMouseDown={handleThumbMouseDownV}
             style={{
               height: `${thumbHeight}px`,
               transform: `translate3d(0, ${thumbTop}px, 0)`,
@@ -310,7 +418,35 @@ export const CustomScrollArea = ({
               "rounded-full cursor-pointer pointer-events-auto transition-[background-color,width] duration-150",
               thumbWidth,
               thumbColor,
-              (isThumbHovered || isDragging) && `${thumbHoverWidth} ${thumbHoverColor}`,
+              (isThumbHoveredV || isDraggingV) && `${thumbHoverWidth} ${thumbHoverColor}`,
+            )}
+          />
+        </div>
+      )}
+
+      {/* ── Horizontal Floating Track & Thumb ────────────────────────────── */}
+      {hasH && (
+        <div
+          onMouseEnter={() => { setIsThumbHoveredH(true); setIsVisible(true); }}
+          onMouseLeave={() => { setIsThumbHoveredH(false); triggerVisibility(); }}
+          style={{ transitionDuration: `${fadeDurationMs}ms` }}
+          className={cn(
+            "absolute left-1.5 bottom-1.5 h-3 z-50 pointer-events-auto transition-opacity ease-out flex flex-col justify-end",
+            hasV ? "right-4" : "right-1.5",
+            showScrollbars ? "opacity-100" : "opacity-0",
+          )}
+        >
+          <div
+            onMouseDown={handleThumbMouseDownH}
+            style={{
+              width: `${thumbWidthH}px`,
+              transform: `translate3d(${thumbLeft}px, 0, 0)`,
+              willChange: "transform",
+            }}
+            className={cn(
+              "rounded-full cursor-pointer pointer-events-auto transition-[background-color,height] duration-150 h-1.5",
+              thumbColor,
+              (isThumbHoveredH || isDraggingH) && `h-2 ${thumbHoverColor}`,
             )}
           />
         </div>

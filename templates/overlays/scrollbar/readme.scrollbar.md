@@ -1,9 +1,11 @@
 # Custom Scrollbar & Global Smooth Scroll Provider
 
-This component module provides two complementary ways to add **smooth momentum scrolling** and **auto-vanishing floating scrollbars** to any React + Tailwind CSS application:
+This module provides two complementary ways to add **smooth lerp-momentum scrolling** and **auto-vanishing floating scrollbars** — for both **vertical and horizontal** axes — to any React + Tailwind CSS application:
 
-1. **`<CustomScrollArea>`**: Local component wrapper for specific containers (e.g. sidebars, modal bodies, dropdowns, code viewers).
-2. **`<GlobalScrollProvider>`**: App-wide provider called ONCE in `App.tsx` that automatically injects smooth scrolling into 100% of scrollable elements (pages, modals, popups, dropdowns, context menus, portals) with ZERO JSX wrapping.
+1. **`<CustomScrollArea>`** — Local component wrapper for specific containers (sidebars, modal bodies, dropdowns, code viewers, etc.).
+2. **`<GlobalScrollProvider>`** — App-wide provider called **once** in `App.tsx` that automatically injects smooth scrolling and floating scrollbars into every scrollable element (pages, modals, popups, dropdowns, context menus, portals) with **zero JSX wrapping**.
+
+Both components automatically show a vertical bar when content overflows vertically, a horizontal bar when content overflows horizontally, or both simultaneously with a corner gap applied automatically.
 
 ---
 
@@ -40,7 +42,7 @@ Paste the snippet below into your main CSS file (e.g. `src/index.css` or `src/st
 
 ### **A. Using the Global Provider (Recommended — Call ONCE in `App.tsx`)**
 
-Wrap your root component ONCE inside `App.tsx`:
+Wrap your root component once inside `App.tsx`:
 
 ```tsx
 import { RouterProvider } from "react-router-dom";
@@ -74,7 +76,7 @@ import { CustomScrollArea } from "@/src/pejay-ui/components";
 
 function MyPage() {
   return (
-    <CustomScrollArea className="h-96 w-full p-4">
+    <CustomScrollArea>
       <div>Your long scrollable content here...</div>
     </CustomScrollArea>
   );
@@ -84,10 +86,26 @@ function MyPage() {
 #### **Component Wrapper Props:**
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `hideDelay` | `number` | `1800` | Idle time (ms) before fade-out |
+| `hideDelay` | `number` | `1800` | Idle time (ms) before scrollbar fades out |
 | `fadeDurationMs` | `number` | `700` | Fade transition opacity duration (ms) |
-| `thumbWidth` | `string` | `"w-1.5"` | Tailwind class for default thumb width |
-| `thumbHoverWidth` | `string` | `"w-2"` | Tailwind class for hovered/dragged thumb width |
-| `thumbColor` | `string` | `"bg-chalk-40"` | Tailwind color class for thumb |
-| `thumbHoverColor` | `string` | `"bg-chalk-70"` | Tailwind color class when hovered |
+| `thumbWidth` | `string` | `"w-1.5"` | Tailwind class for vertical thumb thickness |
+| `thumbHoverWidth` | `string` | `"w-2"` | Vertical thumb thickness when hovered or dragging |
+| `thumbColor` | `string` | `"bg-chalk-40"` | Tailwind color class for idle thumb |
+| `thumbHoverColor` | `string` | `"bg-chalk-70"` | Tailwind color class when hovered or dragging |
 | `smoothWheel` | `boolean` | `true` | Enables silky 60fps lerp momentum wheel scrolling |
+
+---
+
+## 3. Scrolling Behaviour
+
+| Input | Result |
+| :--- | :--- |
+| Mouse wheel (`deltaY`) | Vertical scroll |
+| Trackpad two-finger swipe (`deltaX`) | Horizontal scroll |
+| `Shift` + Mouse wheel | Horizontal scroll |
+| Drag vertical thumb | Vertical scroll (1:1 direct) |
+| Drag horizontal thumb | Horizontal scroll (1:1 direct) |
+
+Both bars auto-appear on scroll or mouse-move and fade out after `hideDelay` ms of idle. Hovering or dragging a thumb keeps it visible and expands it slightly for easier grab.
+
+When both axes are scrollable at the same time, a corner gap is applied automatically so the two thumbs never overlap.
