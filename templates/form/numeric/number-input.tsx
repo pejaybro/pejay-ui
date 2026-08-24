@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Input } from "../text-inputs/input";
+import { Input } from "./input";
 import { Plus, Minus } from "lucide-react";
 import { cn } from "@/pejay-ui/utils/cn";
 

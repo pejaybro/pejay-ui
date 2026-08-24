@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Upload, X, FileText, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/pejay-ui/utils/cn";
-import { Input } from "../text-inputs/input";
+import { Input } from "./input";
 
 /*
  * ============================================================================

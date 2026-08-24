@@ -8,7 +8,8 @@ import {
   PanelLeftClose,
   PanelLeft,
 } from "lucide-react";
-import { SelectInput } from "../../select-dropdown/select-input";
+import { SelectInput } from "../select-dropdown/select-input";
+
 const DateUtils = {};
 import {
   useFloating,
@@ -61,10 +62,10 @@ type DynamicPresetId =
  * - "this-month", "last-month", "next-month"
  * - "this-year", "last-year", "next-year"
  *
- * Dynamic presets (replace 'X' with a number):
- * - "last-X-weeks", "next-X-weeks" (Max X: 52)
- * - "last-X-months", "next-X-months" (Max X: 12)
- * - "last-X-years", "next-X-years" (Max X: 10)
+ * Dynamic presets (template format):
+ * - "last-[n]-weeks", "next-[n]-weeks" (e.g. "last-2-weeks", "next-4-weeks")
+ * - "last-[n]-months", "next-[n]-months" (e.g. "last-3-months", "next-6-months")
+ * - "last-[n]-years", "next-[n]-years" (e.g. "last-5-years", "next-2-years")
  */
 type PresetId = StaticPresetId | DynamicPresetId | string;
 
@@ -81,7 +82,7 @@ export interface DateRangePickerStyles {
   icon?: string;
 }
 
-interface DateRangePickerProps {
+export interface DateRangePickerProps {
   /** Optional custom styles object for decorative overrides */
   styles?: DateRangePickerStyles;
   label?: string;
@@ -144,58 +145,107 @@ export const DateRangePicker = ({
   const [isPanelVisible, setIsPanelVisible] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
 
-  /* Core Utilities from root.config */
-  const {
-    format: baseFormat = (d: Date) => d.toDateString(),
-    addMonths = (d: Date, n: number) =>
-      new Date(d.getFullYear(), d.getMonth() + n, 1),
-    subMonths = (d: Date, n: number) =>
-      new Date(d.getFullYear(), d.getMonth() - n, 1),
-    startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1),
-    endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0),
-    startOfWeek = (d: Date) => {
-      const date = new Date(d);
-      const day = date.getDay();
-      const diff = date.getDate() - day;
-      return new Date(date.setDate(diff));
-    },
-    endOfWeek = (d: Date) => {
-      const date = new Date(d);
-      const day = date.getDay();
-      const diff = date.getDate() + (6 - day);
-      return new Date(date.setDate(diff));
-    },
-    eachDayOfInterval = ({ start, end }: { start: Date; end: Date }) => {
-      const days = [];
-      let current = new Date(start);
-      while (current <= end) {
-        days.push(new Date(current));
-        current.setDate(current.getDate() + 1);
-      }
-      return days;
-    },
-    isSameDay = (d1: Date, d2: Date) => d1.toDateString() === d2.toDateString(),
-    addDays = (d: Date, n: number) => {
-      const r = new Date(d);
-      r.setDate(r.getDate() + n);
-      return r;
-    },
-    subDays = (d: Date, n: number) => {
-      const r = new Date(d);
-      r.setDate(r.getDate() - n);
-      return r;
-    },
-    startOfYear = (d: Date) => new Date(d.getFullYear(), 0, 1),
-    endOfYear = (d: Date) => new Date(d.getFullYear(), 11, 31),
-    addYears = (d: Date, n: number) =>
-      new Date(d.getFullYear() + n, d.getMonth(), d.getDate()),
-    subYears = (d: Date, n: number) =>
-      new Date(d.getFullYear() - n, d.getMonth(), d.getDate()),
-  } = DateUtils as any;
+  /* Built-in Date Utilities */
+  const addMonths = (d: Date, n: number) =>
+    new Date(d.getFullYear(), d.getMonth() + n, 1);
+  const subMonths = (d: Date, n: number) =>
+    new Date(d.getFullYear(), d.getMonth() - n, 1);
+  const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
+  const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0);
+  const startOfWeek = (d: Date) => {
+    const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const day = date.getDay();
+    date.setDate(date.getDate() - day);
+    return date;
+  };
+  const endOfWeek = (d: Date) => {
+    const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const day = date.getDay();
+    date.setDate(date.getDate() + (6 - day));
+    return date;
+  };
+  const eachDayOfInterval = ({ start, end }: { start: Date; end: Date }) => {
+    const days: Date[] = [];
+    if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) return days;
+    const current = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    const last = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+    while (current.getTime() <= last.getTime()) {
+      days.push(new Date(current));
+      current.setDate(current.getDate() + 1);
+    }
+    return days;
+  };
+  const isSameDay = (d1: Date, d2: Date) =>
+    d1 && d2 && d1.toDateString() === d2.toDateString();
+  const addDays = (d: Date, n: number) => {
+    const r = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    r.setDate(r.getDate() + n);
+    return r;
+  };
+  const subDays = (d: Date, n: number) => {
+    const r = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    r.setDate(r.getDate() - n);
+    return r;
+  };
+  const startOfYear = (d: Date) => new Date(d.getFullYear(), 0, 1);
+  const endOfYear = (d: Date) => new Date(d.getFullYear(), 11, 31);
+  const addYears = (d: Date, n: number) =>
+    new Date(d.getFullYear() + n, d.getMonth(), d.getDate());
+  const subYears = (d: Date, n: number) =>
+    new Date(d.getFullYear() - n, d.getMonth(), d.getDate());
 
   const format = (d: Date, fmtStr: string) => {
-    const normalized = fmtStr.replace(/mm/g, "MM");
-    return baseFormat(d, normalized);
+    if (!d || isNaN(d.getTime())) return "";
+    const monthNames = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    const fullMonthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const day = d.getDate();
+    const month = d.getMonth();
+    const year = d.getFullYear();
+    const dd = String(day).padStart(2, "0");
+    const MM = String(month + 1).padStart(2, "0");
+    const yyyy = String(year);
+    const MMM = monthNames[month];
+    const MMMM = fullMonthNames[month];
+
+    return fmtStr
+      .replace(/yyyy/g, yyyy)
+      .replace(/MMMM/g, MMMM)
+      .replace(/MMM/g, MMM)
+      .replace(/MM/g, MM)
+      .replace(/mm/g, MM)
+      .replace(/dd/g, dd)
+      .replace(/d/g, String(day));
+  };
+
+  const parseDate = (str: string, fmt: string) => {
+    try {
+      const parts = str.trim().split(fmt.includes("/") ? "/" : "-");
+      if (parts.length !== 3) return new Date("invalid");
+      let day: string, month: string, year: string;
+      if (fmt.toLowerCase().startsWith("dd")) {
+        day = parts[0];
+        month = parts[1];
+        year = parts[2];
+      } else if (fmt.toLowerCase().startsWith("mm")) {
+        month = parts[0];
+        day = parts[1];
+        year = parts[2];
+      } else {
+        year = parts[0];
+        month = parts[1];
+        day = parts[2];
+      }
+      const parsed = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      return isNaN(parsed.getTime()) ? new Date("invalid") : parsed;
+    } catch {
+      return new Date("invalid");
+    }
   };
 
   /* Local helper functions for missing exports */
@@ -306,8 +356,8 @@ export const DateRangePicker = ({
       const p1 = masked.split(" to ")[0];
       const p2 = masked.split(" to ")[1];
       if (p1 && p2) {
-        const d1 = new Date(p1);
-        const d2 = new Date(p2);
+        const d1 = parseDate(p1, typeableFormat);
+        const d2 = parseDate(p2, typeableFormat);
         if (!isNaN(d1.getTime()) && !isNaN(d2.getTime())) {
           setRange({ from: d1, to: d2 });
           onChange?.({ from: d1, to: d2 });
@@ -930,7 +980,7 @@ export const DateRangePicker = ({
                         <SelectInput
                           options={monthOptions}
                           value={viewDate.getMonth().toString()}
-                          onChange={key => {
+                          onChange={(key: string) => {
                             setViewDate(
                               new Date(
                                 viewDate.getFullYear(),
@@ -944,7 +994,7 @@ export const DateRangePicker = ({
                         <SelectInput
                           options={yearOptions}
                           value={viewDate.getFullYear().toString()}
-                          onChange={key => {
+                          onChange={(key: string) => {
                             setViewDate(
                               new Date(parseInt(key), viewDate.getMonth(), 1),
                             );
